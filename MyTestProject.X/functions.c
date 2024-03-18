@@ -2,9 +2,8 @@
  * File:   functions.c
  * Author: aless
  *
- * Created on March 7, 2024, 11:57 AM
+ * Created on 15 marzo 2024, 18.48
  */
-
 
 #include "xc.h"
 #include "functions.h"
@@ -29,32 +28,29 @@ void initializeIO() {
 // turn on LEDs
 void turnOnLed(int LED_NUMBER) {
     if (LED_NUMBER == 1) {
-        LD1_PIN = 1;
+        LD1_LED = 1;
     }
     if (LED_NUMBER == 2) {
-        LD2_PIN = 1;
+        LD2_LED = 1;
     }
 }
 
 // turn off LEDs
 void turnOffLed(int LED_NUMBER) {
     if (LED_NUMBER == 1) {
-        LD1_PIN = 0;
+        LD1_LED = 0;
     }
     if (LED_NUMBER == 2) {
-        LD2_PIN = 0;
+        LD2_LED = 0;
     }
 }
 
 // toggle LEDs
 void toggleLed(int LED_NUMBER) {
     if (LED_NUMBER == 1) {
-        LD1_PIN = !LD1_PIN;
+        LD1_LED = !LD1_LED;
     }
     if (LED_NUMBER == 2) {
-        LD2_PIN = !LD2_PIN;
+        LD2_LED = !LD2_LED;
     }
 }
-
-
-

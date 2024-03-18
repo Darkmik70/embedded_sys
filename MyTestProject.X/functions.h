@@ -38,23 +38,22 @@
 // TODO Insert C++ class definitions if appropriate
 
 // TODO Insert declarations
-
 // define LEDs
-#define LD1_PIN LATAbits.LATA0
-#define LD2_PIN LATGbits.LATG9
+#define LD1_LED LATAbits.LATA0
+#define LD2_LED LATGbits.LATG9
 
 // define BUTTONs
-#define T2_PIN PORTEbits.RE8
-#define T3_PIN PORTEbits.RE9 
+#define T2_BUTTON PORTEbits.RE8
+#define T3_BUTTON PORTEbits.RE9
+
+// define TIMERs
+#define TIMER1 1
+#define TIMER2 2
 
 void initializeIO();
-
-void turnOnLed(int LED_NUMBER);
-
 void turnOffLed(int LED_NUMBER);
-
+void turnOnLed(int LED_NUMBER);
 void toggleLed(int LED_NUMBER);
-
 // Comment a function and leverage automatic documentation with slash star star
 /**
     <p><b>Function prototype:</b></p>

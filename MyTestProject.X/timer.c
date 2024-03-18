@@ -1,99 +1,131 @@
 /*
- * File:   timer.c
- * Author: aless
+ * File:   ex1.c
+ * Author: RomiC
  *
- * Created on 12 marzo 2024, 15.11
+ * Created on 5 march 2024, 18.46
  */
-
 
 #include "xc.h"
 #include "timer.h"
 
-void tmr_setup_period(int timer, int ms) {
-    long new_clocks, clock_steps, Fcy;
-    int result;
+int set_prescaler(int ms){
+    int prescaler = 1;
+    long new_clock;
+    long clock = 72000000;
+    if (((float)ms)*clock > 65535){
+        prescaler = 8;
+        new_clock = clock/prescaler;
+        if (((float)ms)*new_clock > 65535){
+            prescaler = 64;
+            new_clock = clock/prescaler;
+            if (((float)ms)*new_clock > 65535){
+                prescaler = 256;
+            }
+        }
+    }
+    int result = (clock/prescaler)*((float)ms/1000);
+    return result;
+}
+
+int number_prescaler(int ms){
+    int prescaler = 1;
+    long new_clock;
+    long clock = 72000000;
     int num = 0;
-    long Fosc = 144000000;
-    Fcy = Fosc / 2;
-    clock_steps = Fcy / 2;
-    // Setting the prescaler
-    if (clock_steps > 65535) {
-        new_clocks = clock_steps / 8;
+    if (((float)ms)*clock > 65535){
+        prescaler = 8;
+        new_clock = clock/prescaler;
         num = 1;
-        if (new_clocks > 65535) {
-            new_clocks = clock_steps / 16;
+        if (((float)ms)*new_clock > 65535){
+            prescaler = 64;
+            new_clock = clock/prescaler;
             num = 2;
-            if (new_clocks > 65535) {
-                new_clocks = clock_steps / 256;
+            if (((float)ms)*new_clock > 65535){
                 num = 3;
             }
         }
     }
-    result = (new_clocks)*((float) ms / 1000); // value of the timer
-    // Setting the timer 1
-    if (timer == TIMER1) {
+    return num;
+}
+
+void tmr_setup_period(int timer, int ms){
+    int num = number_prescaler(ms);
+    if (timer == TIMER1){
         T1CONbits.TON = 0;
         IFS0bits.T1IF = 0;
-        TMR1 = 0; // reset the timer counter
-        PR1 = result; // set to compare the TMRx
-        if (num == 3) {
-            T1CONbits.TCKPS = 3; // sets the prescaler
-        } else if (num == 2) {
-            T1CONbits.TCKPS = 2; // sets the prescaler
-        } else if (num == 1) {
-            T1CONbits.TCKPS = 1; // sets the prescaler
-        } else if (num == 0) {
-            T1CONbits.TCKPS = 0; // sets the prescaler
+        TMR1 = 0;                   // reset the timer counter
+        PR1 = set_prescaler(ms);    // set to compare the TMRx
+        if (num == 3){
+            T1CONbits.TCKPS = 3;
         }
-        T1CONbits.TON = 1; // starts the timer
-    }        // Setting the timer 2
-    else if (timer == TIMER2) {
+        else if (num == 2){
+            T1CONbits.TCKPS = 2;
+        }
+        else if (num == 1){
+            T1CONbits.TCKPS = 1;
+        }
+        else if (num == 0){
+            T1CONbits.TCKPS = 0;
+        }
+        T1CONbits.TON = 1;  // start the timer
+    }
+    else if (timer == TIMER2){
         T2CONbits.TON = 0;
         IFS0bits.T2IF = 0;
         TMR2 = 0;
-        PR2 = result; // set to compare the TMRx
-        if (num == 3) {
-            T2CONbits.TCKPS = 3; // sets the prescaler
-        } else if (num == 2) {
-            T2CONbits.TCKPS = 2; // sets the prescaler
-        } else if (num == 1) {
-            T2CONbits.TCKPS = 1; // sets the prescaler
-        } else if (num == 0) {
-            T2CONbits.TCKPS = 0; // sets the prescaler
+        PR2 = set_prescaler(ms);
+        
+        if (num == 3){
+            T2CONbits.TCKPS = 3;
         }
-        T2CONbits.TON = 1; // starts the timer
+        else if (num == 2){
+            T2CONbits.TCKPS = 2;
+        }
+        else if (num == 1){
+            T2CONbits.TCKPS = 1;
+        }
+        else if (num == 0){
+            T2CONbits.TCKPS = 0;
+        }
+        T2CONbits.TON = 1;
     }
 }
 
 // use the timer flag to wait until it has expired
-
-int tmr_wait_period(int timer) {
-    if (timer == TIMER1) {
-        T1CONbits.TON = 0;
-        if (IFS0bits.T1IF == 1) {
+int tmr_wait_period(int timer){     
+    if (timer == TIMER1){
+        if (IFS0bits.T1IF == 1){
             IFS0bits.T1IF = 0;
             return 1;
         }
-        T1CONbits.TON = 1;
-        while (IFS0bits.T1IF == 0) {
-        } // Until the flag is not raised 
+        while(IFS0bits.T1IF == 0){} // Until the flag is not raised 
         IFS0bits.T1IF = 0;
-        return 0;
-    } else if (timer == TIMER2) {
-        T2CONbits.TON = 0;
-        if (IFS0bits.T2IF == 1) {
+    }
+    else if (timer == TIMER2){
+        if (IFS0bits.T2IF == 1){
             IFS0bits.T2IF = 0;
             return 1;
         }
-        T2CONbits.TON = 1;
-        while (IFS0bits.T2IF == 0) {
-        }
+        while(IFS0bits.T2IF == 0){}
         IFS0bits.T2IF = 0;
-        return 0;
     }
+    return 0;
 }
 
-void tmr_wait_ms(int timer, int ms) {
-    tmr_setup_period(timer, ms);
-    tmr_wait_period(timer);
+void tmr_wait_ms(int timer, int ms){
+    int ret, t, rest;
+    t = ms;
+    while(t!=0){
+        rest = t%200;
+        if (rest==0){
+            tmr_setup_period(timer, 200);
+            ret = tmr_wait_period(timer);
+            t = t - 200;
+        }
+        else{
+            tmr_setup_period(timer, rest);
+            ret = tmr_wait_period(timer);
+            t = t - rest;
+        }
+    }
 }

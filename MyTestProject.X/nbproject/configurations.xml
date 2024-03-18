@@ -4,8 +4,8 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>functions.h</itemPath>
       <itemPath>timer.h</itemPath>
+      <itemPath>functions.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -19,9 +19,27 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>main.c</itemPath>
-      <itemPath>functions.c</itemPath>
-      <itemPath>timer.c</itemPath>
+      <logicalFolder name="f4" displayName="0.Features" projectFiles="true">
+        <itemPath>timer.c</itemPath>
+        <itemPath>functions.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="1.AssignmentIOPorts" projectFiles="true">
+        <itemPath>ex1_ports.c</itemPath>
+        <itemPath>ex2_ports.c</itemPath>
+        <itemPath>ex3_ports.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="2.AssignmentTimer" projectFiles="true">
+        <itemPath>ex1_timer.c</itemPath>
+        <itemPath>ex2_timer.c</itemPath>
+        <itemPath>ex3_timer.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3"
+                     displayName="3.AssignmentInterrupt"
+                     projectFiles="true">
+        <itemPath>ex1_interrupt.c</itemPath>
+        <itemPath>ex2_interrupt.c</itemPath>
+        <itemPath>ex3_interrupt.c</itemPath>
+      </logicalFolder>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -197,6 +215,126 @@
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
       </C30Global>
+      <Simulator>
+        <property key="W0004_CORE_WDT_RESET" value="report"/>
+      </Simulator>
+      <Tool>
+        <property key="W0004_CORE_WDT_RESET" value="report"/>
+      </Tool>
+      <item path="ex1_interrupt.c" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
+      <item path="ex1_ports.c" ex="true" overriding="false">
+      </item>
+      <item path="ex1_timer.c" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
+      <item path="ex2_interrupt.c" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
+      <item path="ex2_ports.c" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
+      <item path="ex2_timer.c" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
+      <item path="ex3_interrupt.c" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
+      <item path="ex3_ports.c" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
+      <item path="ex3_timer.c" ex="false" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>

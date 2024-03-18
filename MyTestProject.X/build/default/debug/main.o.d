@@ -1,3 +1,3 @@
-build/default/debug/main.o: main.c functions.h
+build/default/debug/main.o: main.c timer.h
 
-functions.h:
+timer.h:

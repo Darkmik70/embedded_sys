@@ -1,5 +1,3 @@
-build/default/production/main.o: main.c timer.h functions.h
+build/default/production/main.o: main.c timer.h
 
 timer.h:
-
-functions.h:
