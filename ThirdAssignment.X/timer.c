@@ -93,8 +93,8 @@ int number_prescaler(int ms){
         }
         
         // Interrupt procedure
-        IFS0bits.T2IF = 0;  // Clear Timer1 Interrupt Flag
-        IEC0bits.T2IE = 1;  // Enable Timer1 Interrupt
+        //IFS0bits.T2IF = 0;  // Clear Timer1 Interrupt Flag
+        //EIC0bits.T2IE = 1;  // Enable Timer1 Interrupt
         
         T2CONbits.TON = 1;  // Start the timer
     }
@@ -104,7 +104,7 @@ int number_prescaler(int ms){
 int tmr_wait_period(int timer){     
     if (timer == TIMER1){
         if (IFS0bits.T1IF == 1){
-            IFS0bits.T1IF = 0;
+            //IFS0bits.T1IF = 0;
             return 1;
         }
         while(IFS0bits.T1IF == 0){} // Until the flag is not raised 

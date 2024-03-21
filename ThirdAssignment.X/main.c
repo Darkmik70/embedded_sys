@@ -5,10 +5,9 @@
  * Created on March 12, 2024, 4:48 PM
  */
 
-
+#include "xc.h"
 #include "timer.h"
 #include "interrupts.h"
-#include "xc.h"
 
 void blinkLED(int timer, int ms){
     tmr_wait_ms(timer,ms);
@@ -22,7 +21,7 @@ void mapINT1(){
     
     // we know is in this register beacuse is written in the datasheet
     INTCON2bits.GIE = 1;    // set global interrupt enable
-    INTCON2bits.INT1EP = 1; // Interrupt on negative edge
+    //INTCON2bits.INT1EP = 1; // Interrupt on negative edge
     
     IFS1bits.INT1IF = 0;        // clear the interrupt flag
     IEC1bits.INT1IE = 1;        // enable interrupt
@@ -30,7 +29,7 @@ void mapINT1(){
 
 //Exercise n.2
 int main(void){
-        
+    
     // all the analog are disabled
     ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
     
@@ -47,9 +46,11 @@ int main(void){
     mapINT1();
     
     int delay = 200;
+    int state = 0;
     
     while(1){
-        tmr_wait_ms(TIMER2,delay);
+        state = PORTEbits.RE8;
+        tmr_wait_ms(TIMER1,delay);
         LATAbits.LATA0 = !LATAbits.LATA0;        // Blink LED1 without using interrups
     }
     return 0;
