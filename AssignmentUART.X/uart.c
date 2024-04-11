@@ -36,6 +36,7 @@ void sendIntAsChars(int num) {
 
     // Send each character of the sequence
     for (int i = 0; i < strlen(buffer);) {
+        
         if (U1STAbits.UTXBF == 0) {
             U1TXREG = buffer[i];
             i++;

@@ -8,12 +8,13 @@
 #include "xc.h"
 #include "timer.h"
 #include "functions.h"
-#include "interrupts_advanced.h"
+//#include "interrupts_advanced.h"
 #include "uart.h"
 #include <string.h>
+#include <stdio.h>
 
 void algorithm() {
-    tmr_wait_ms(TIMER2, 10);
+    tmr_wait_ms(TIMER2, 7);
 }
 
 void mapInterruptsButton() {
@@ -31,7 +32,7 @@ int main() {
     int ret, data;
     int countChar = 0;
     char buffer[3] = {0};
-    char toSendC[999] = " CARATTERE=";
+    char toSendC[54] = " CARATTERE=";
     char toSendD[54] = " D=";
 
     initializeIO();
@@ -50,37 +51,33 @@ int main() {
             // Send the number of character or the number of time the timer expired
             if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
                 data = sendNumberChar('C');
-
-                for (int i = 0; i < strlen(toSendC);) {
-                    if (U1STAbits.UTXBF == 0) {
-                        U1TXREG = toSendC[i];
-                        i++;
-                    } else {
-                        while (U1STAbits.UTXBF == 1) {
-                        }
-                    }
+                // da mettere il while(UISTAbits.UTXBF==0) manda
+                for (int i = 0; i < strlen(toSendC); i++) {
+                    while (U1STAbits.UTXBF == 1) {}
+                    U1TXREG = toSendC[i];
                 }
                 sendIntAsChars(data);
+                
+                IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
+                IEC1bits.INT1IE = 1; // Enable the interrupt of INT1
+
             }
-            IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
-            IEC1bits.INT1IE = 1; // Enable the interrupt of INT1
+            //IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
+            //IEC1bits.INT1IE = 1; // Enable the interrupt of INT1
 
             if (T3_BUTTON == 1 && IFS1bits.INT2IF == 1) {
                 data = sendNumberChar('D');
 
-                for (int i = 0; i < strlen(toSendD);) {
-                    if (U1STAbits.UTXBF == 0) {
-                        U1TXREG = toSendD[i];
-                        i++;
-                    } else {
-                        while (U1STAbits.UTXBF == 1) {
-                        }
-                    }
+               for (int i = 0; i < strlen(toSendD); i++) {
+                    while (U1STAbits.UTXBF == 1) {}
+                    U1TXREG = toSendD[i];
                 }
                 sendIntAsChars(data);
+                IFS1bits.INT2IF = 0; // Clear the interrupt flag of INT2
+                IEC1bits.INT2IE = 1; // Enable the interrupt of INT1
             }
-            IFS1bits.INT2IF = 0; // Clear the interrupt flag of INT2
-            IEC1bits.INT2IE = 1; // Enable the interrupt of INT1
+            //IFS1bits.INT2IF = 0; // Clear the interrupt flag of INT2
+            //IEC1bits.INT2IE = 1; // Enable the interrupt of INT1
 
             IFS1bits.T4IF = 0;
         }
@@ -111,13 +108,11 @@ int main() {
                 }
             }
         }
-
-
         ret = tmr_wait_period(TIMER1);
         if (ret == 1) {
             missedTimer++;
             receiveMsg(missedTimer, 'D');
         }
-        return 0;
     }
+    return 0;
 }

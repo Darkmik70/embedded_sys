@@ -219,6 +219,8 @@
         <C30Global>
         </C30Global>
       </item>
+      <item path="interrupts_advanced.h" ex="true" overriding="false">
+      </item>
       <item path="interrupts_basic.c" ex="true" overriding="false">
         <C30>
         </C30>
