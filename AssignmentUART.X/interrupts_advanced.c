@@ -26,7 +26,7 @@ void __attribute__ (( __interrupt__ , __auto_psv__ )) _T3Interrupt() {
 
 void __attribute__ (( __interrupt__ , __auto_psv__ )) _T4Interrupt() {
     int data;
-    IFS1bits.T4IF = 0;              // Clear the interrupt 4 flag
+    //IFS1bits.T4IF = 0;              // Clear the interrupt 4 flag
     IEC1bits.T4IE = 0;              // Disable the interrupt of the timer 4
     
     T4CONbits.TON = 0;              // Stop timer 4
@@ -58,7 +58,7 @@ void __attribute__ (( __interrupt__ , __auto_psv__ )) _INT1Interrupt() {
     IEC1bits.INT1IE = 0;            // Disable INT1 interrupt
     IEC1bits.T4IE = 1;              // Enable T4 interrupt
     
-    tmr_setup_period(TIMER4,20);        
+    tmr_setup_period(TIMER4,10);        
 }
 
 void __attribute__ (( __interrupt__ , __auto_psv__ )) _INT2Interrupt() {
@@ -66,7 +66,7 @@ void __attribute__ (( __interrupt__ , __auto_psv__ )) _INT2Interrupt() {
     IEC1bits.T4IE = 1;              // Enable T4 interrupt
     
     //IFS1bits.INT2IF = 0;            // Clear INT2 interrupt flag
-    tmr_setup_period(TIMER4,5);
+    tmr_setup_period(TIMER4,10);
 }
 
 void __attribute__ (( __interrupt__ , __auto_psv__ )) _U1RXInterrupt() {

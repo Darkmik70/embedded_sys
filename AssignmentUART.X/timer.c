@@ -51,8 +51,8 @@ void tmr_setup_period(int timer, int ms){
             T1CONbits.TCKPS = 0;
         }
         
-        IFS0bits.T1IF = 0; // clear TIMER1 interrupt flag
-        IEC0bits.T1IE = 1; // enable TIMER1 interrupt
+        //IFS0bits.T1IF = 0; // clear TIMER1 interrupt flag
+        //IEC0bits.T1IE = 1; // enable TIMER1 interrupt
         
         T1CONbits.TON = 1;  // start the timer
     }
@@ -75,13 +75,13 @@ void tmr_setup_period(int timer, int ms){
             T2CONbits.TCKPS = 0;
         }
         
-        IFS0bits.T2IF = 0; // clear TIMER1 interrupt flag
-        IEC0bits.T2IE = 1; // enable TIMER1 interrupt
+        //IFS0bits.T2IF = 0; // clear TIMER1 interrupt flag
+        //IEC0bits.T2IE = 1; // enable TIMER1 interrupt
         
         T2CONbits.TON = 1;
     }
     else if (timer == TIMER3){
-        T2CONbits.TON = 0;
+        T3CONbits.TON = 0;
         IFS0bits.T3IF = 0;
         TMR3 = 0;
         PR3 = result;
@@ -99,8 +99,8 @@ void tmr_setup_period(int timer, int ms){
             T3CONbits.TCKPS = 0;
         }
         
-        IFS0bits.T3IF = 0; // clear TIMER1 interrupt flag
-        IEC0bits.T3IE = 1; // enable TIMER1 interrupt
+        //IFS0bits.T3IF = 0; // clear TIMER1 interrupt flag
+        //IEC0bits.T3IE = 1; // enable TIMER1 interrupt
         
         T3CONbits.TON = 1;
     }
@@ -122,8 +122,8 @@ void tmr_setup_period(int timer, int ms){
             T4CONbits.TCKPS = 0;
         }
         // Interrupt procedure
-        IFS1bits.T4IF = 0;  // Clear Timer1 Interrupt Flag
-        IEC1bits.T4IE = 1;  // Enable Timer1 Interrupt
+        //IFS1bits.T4IF = 0;  // Clear Timer1 Interrupt Flag
+        //IEC1bits.T4IE = 1;  // Enable Timer1 Interrupt
         
         T4CONbits.TON = 1;  // Start the timer
     }
@@ -137,7 +137,7 @@ int tmr_wait_period(int timer){
             return 1;
         }
         while(IFS0bits.T1IF == 0){} // Until the flag is not raised 
-        //IFS0bits.T1IF = 0;
+        IFS0bits.T1IF = 0;
     }
     else if (timer == TIMER2){
         if (IFS0bits.T2IF == 1){
@@ -145,7 +145,7 @@ int tmr_wait_period(int timer){
             return 1;
         }
         while(IFS0bits.T2IF == 0){}
-        //IFS0bits.T2IF = 0;
+        IFS0bits.T2IF = 0;
     }
     else if (timer == TIMER3){
         if (IFS0bits.T3IF == 1){
@@ -153,7 +153,7 @@ int tmr_wait_period(int timer){
             return 1;
         }
         while(IFS0bits.T3IF == 0){}
-        //IFS0bits.T3IF = 0;
+        IFS0bits.T3IF = 0;
     }
     else if (timer == TIMER4){
         if (IFS1bits.T4IF == 1){
@@ -161,7 +161,7 @@ int tmr_wait_period(int timer){
             return 1;
         }
         while(IFS1bits.T4IF == 0){}
-        //IFS1bits.T4IF = 0;
+        IFS1bits.T4IF = 0;
     }
     return 0;
 }
