@@ -51,8 +51,8 @@ void tmr_setup_period(int timer, int ms){
             T1CONbits.TCKPS = 0;
         }
         
-        //IFS0bits.T1IF = 0; // clear TIMER1 interrupt flag
-        //IEC0bits.T1IE = 1; // enable TIMER1 interrupt
+        IFS0bits.T1IF = 0; // clear TIMER1 interrupt flag
+        IEC0bits.T1IE = 1; // enable TIMER1 interrupt
         
         T1CONbits.TON = 1;  // start the timer
     }
@@ -99,8 +99,8 @@ void tmr_setup_period(int timer, int ms){
             T3CONbits.TCKPS = 0;
         }
         
-        //IFS0bits.T3IF = 0; // clear TIMER1 interrupt flag
-        //IEC0bits.T3IE = 1; // enable TIMER1 interrupt
+        IFS0bits.T3IF = 0; // clear TIMER1 interrupt flag
+        IEC0bits.T3IE = 1; // enable TIMER1 interrupt
         
         T3CONbits.TON = 1;
     }

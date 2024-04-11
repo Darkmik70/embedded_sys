@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=functions.c timer.c ex2_advanced.c interrupts_advanced.c uart.c
+SOURCEFILES_QUOTED_IF_SPACED=functions.c timer.c interrupts_advanced.c uart.c ex2_advanced.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/functions.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/ex2_advanced.o ${OBJECTDIR}/interrupts_advanced.o ${OBJECTDIR}/uart.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/functions.o.d ${OBJECTDIR}/timer.o.d ${OBJECTDIR}/ex2_advanced.o.d ${OBJECTDIR}/interrupts_advanced.o.d ${OBJECTDIR}/uart.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/functions.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/interrupts_advanced.o ${OBJECTDIR}/uart.o ${OBJECTDIR}/ex2_advanced.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/functions.o.d ${OBJECTDIR}/timer.o.d ${OBJECTDIR}/interrupts_advanced.o.d ${OBJECTDIR}/uart.o.d ${OBJECTDIR}/ex2_advanced.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/functions.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/ex2_advanced.o ${OBJECTDIR}/interrupts_advanced.o ${OBJECTDIR}/uart.o
+OBJECTFILES=${OBJECTDIR}/functions.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/interrupts_advanced.o ${OBJECTDIR}/uart.o ${OBJECTDIR}/ex2_advanced.o
 
 # Source Files
-SOURCEFILES=functions.c timer.c ex2_advanced.c interrupts_advanced.c uart.c
+SOURCEFILES=functions.c timer.c interrupts_advanced.c uart.c ex2_advanced.c
 
 
 
@@ -101,12 +101,6 @@ ${OBJECTDIR}/timer.o: timer.c  .generated_files/flags/default/233a93c843f71b56bb
 	@${RM} ${OBJECTDIR}/timer.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  timer.c  -o ${OBJECTDIR}/timer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/timer.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ex2_advanced.o: ex2_advanced.c  .generated_files/flags/default/5860e398ba9dc839a7c7086c6d2325e70e9a8d12 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/ex2_advanced.o.d 
-	@${RM} ${OBJECTDIR}/ex2_advanced.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ex2_advanced.c  -o ${OBJECTDIR}/ex2_advanced.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ex2_advanced.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
-	
 ${OBJECTDIR}/interrupts_advanced.o: interrupts_advanced.c  .generated_files/flags/default/47e1cbdcb704c951254532072fbe0ba05b257f2a .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/interrupts_advanced.o.d 
@@ -118,6 +112,12 @@ ${OBJECTDIR}/uart.o: uart.c  .generated_files/flags/default/cd10b2133aa56aea6ab0
 	@${RM} ${OBJECTDIR}/uart.o.d 
 	@${RM} ${OBJECTDIR}/uart.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  uart.c  -o ${OBJECTDIR}/uart.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/uart.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
+${OBJECTDIR}/ex2_advanced.o: ex2_advanced.c  .generated_files/flags/default/5860e398ba9dc839a7c7086c6d2325e70e9a8d12 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/ex2_advanced.o.d 
+	@${RM} ${OBJECTDIR}/ex2_advanced.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ex2_advanced.c  -o ${OBJECTDIR}/ex2_advanced.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ex2_advanced.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
 else
 ${OBJECTDIR}/functions.o: functions.c  .generated_files/flags/default/22d1f5e2f542c78d02412402dffe0357973b3b5d .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
@@ -132,12 +132,6 @@ ${OBJECTDIR}/timer.o: timer.c  .generated_files/flags/default/16f0a574587c4767ef
 	@${RM} ${OBJECTDIR}/timer.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  timer.c  -o ${OBJECTDIR}/timer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/timer.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ex2_advanced.o: ex2_advanced.c  .generated_files/flags/default/d213ec203c6cbf1484ddff41314fa1402a2c6942 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/ex2_advanced.o.d 
-	@${RM} ${OBJECTDIR}/ex2_advanced.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ex2_advanced.c  -o ${OBJECTDIR}/ex2_advanced.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ex2_advanced.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
-	
 ${OBJECTDIR}/interrupts_advanced.o: interrupts_advanced.c  .generated_files/flags/default/5771816a1252b7c1c3001dbdea3669bbd868fba4 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/interrupts_advanced.o.d 
@@ -149,6 +143,12 @@ ${OBJECTDIR}/uart.o: uart.c  .generated_files/flags/default/e0dfdc691f1242bece9a
 	@${RM} ${OBJECTDIR}/uart.o.d 
 	@${RM} ${OBJECTDIR}/uart.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  uart.c  -o ${OBJECTDIR}/uart.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/uart.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
+${OBJECTDIR}/ex2_advanced.o: ex2_advanced.c  .generated_files/flags/default/d213ec203c6cbf1484ddff41314fa1402a2c6942 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/ex2_advanced.o.d 
+	@${RM} ${OBJECTDIR}/ex2_advanced.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ex2_advanced.c  -o ${OBJECTDIR}/ex2_advanced.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ex2_advanced.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
 endif
 
