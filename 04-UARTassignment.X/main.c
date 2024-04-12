@@ -32,11 +32,13 @@ void algorithm(){
 void mapInterruptsButton(){
     // Assign an interrupt INT1 to the corresponding pin 
     RPINR0bits.INT1R = 88;  //RPI88 in hex (88)
+    INTCON2bits.GIE = 1;    // set global interrupt enable
     IFS1bits.INT1IF = 0;    // clear the interrupt flag
     IEC1bits.INT1IE = 1;    // enable interrupt
     
     // Assign an interrupt INT2 to the corresponding pin
     RPINR1bits.INT2R = 89;  //RPI88 in hex (89)
+    INTCON2bits.GIE = 1;    // set global interrupt enable
     IFS1bits.INT2IF = 0;    // clear the interrupt flag INT2
     IEC1bits.INT2IE = 1;    // enable external interrupt iNT2
 }
@@ -55,7 +57,7 @@ int main(){
     initUART();
     mapInterruptsButton();
    
-    INTCON2bits.GIE = 1;    // set global interrupt enable
+    //INTCON2bits.GIE = 1;    // set global interrupt enable
     
     tmr_setup_period(TIMER3, 200);  // timer set to have a blinking every 200 ms
     tmr_setup_period(TIMER1, 10);
