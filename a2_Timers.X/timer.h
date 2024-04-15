@@ -20,7 +20,7 @@ void tmr_setup_period(int timer, int ms);
  * @param timer - TIMER1 or TIMER2
  * @return int - Returns 1 if flag is already raised, otherwise 0;
  */
-void tmr_wait_period(int timer);
+int tmr_wait_period(int timer);
 
 /**
  * @brief Set up the timer for given period and immediately wait for that period
@@ -28,7 +28,7 @@ void tmr_wait_period(int timer);
  * @param timer 
  * @param ms - the period
  */
-void tmr_wait_ms(int timer, int ms)
+void tmr_wait_ms(int timer, int ms);
 
 #endif	/* XC_HEADER_TEMPLATE_H */
 
