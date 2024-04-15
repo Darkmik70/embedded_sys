@@ -13,7 +13,7 @@ void tmr_setup_period(int timer, int ms) {
     long clock = 72000000;      // 72 MHz
     int ps_mode = 0;            // Mode of prescaler 0, 1, 2, 3
     int prescaler = 1;          // Value of prescaler
-    long new_clock = ;          // Prescaled clock
+    long new_clock;          // Prescaled clock
     /* check if we need to use prescaler */
     if ((float)ms * clock > 65535) // Check if the number of steps is within thershold of 16bit
     {
@@ -130,7 +130,7 @@ int tmr_wait_period(int timer) {
 }
 
 
-void tmr_wait_ms(int timer, int ms) {
-    tmr_setup_period(timer, ms);
-    tmr_wait_period(timer);
+void tmr_wait_ms(int timer, int ms)
+{
+    
 }
