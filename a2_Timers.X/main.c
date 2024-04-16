@@ -42,9 +42,38 @@ void ex_2()
     }
 }
 
+void ex_3()
+{
+        // all the analog are disabled
+    ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
+    
+    // initialized the function of the pins
+    TRISAbits.TRISA0 = 0;   // set pin as output
+    TRISGbits.TRISG9 = 0;   // set pin as output
+    
+    tmr_setup_period(TIMER1,200);
+    
+    int delay = 200;     // we have to try 50, 200, 2000
+    int ret;
+    
+        while(1){
+        LATAbits.LATA0 = 1;
+        tmr_wait_ms(TIMER2,delay);
+        LATAbits.LATA0 = 0;  
+        ret = tmr_wait_period(TIMER1);
+        if (ret){
+            LATGbits.LATG9 = 1;
+        }
+        else {
+            LATGbits.LATG9 = 0;
+        }
+    }
+}
+
 int main(void) 
 {
     //    ex_1();
-    ex_2();
+    //    ex_2();
+    ex_3();
     return 0;
 }
