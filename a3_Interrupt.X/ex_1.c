@@ -8,12 +8,6 @@
 #include "timer.h"
 
 
-
-/// Ex 2
-// Blink LD2 at 2.5 Hz (200ms on, 200 ms off) without using interrupts
-// Every time T2 is pressed toggle the led LD2 using interrupts
-
-
 // Ex1
 // Blink LD1 at 2.5 Hz (200ms on, 200 ms off) without using interrupts
 // Then make LD2 blink at 1Hz frequency using interrupts
@@ -56,9 +50,8 @@ int main(void)
     
     cnt = 0; // Magic counter for Timer2
     tmr_setup_period(TIMER2, 200);
+
     
-
-
     while(1)
     {  
         tmr_wait_period(TIMER1);
