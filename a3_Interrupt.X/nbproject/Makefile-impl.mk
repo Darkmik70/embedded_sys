@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=a2_Timers.X
+PROJECTNAME=a3_Interrupt.X
 
 # Active Configuration
 DEFAULTCONF=default

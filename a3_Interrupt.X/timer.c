@@ -7,6 +7,7 @@
 #include "xc.h"
 #include "timer.h"
 
+
 int set_prescaler(int ms){
     int prescaler = 1;
     long new_clock;
@@ -51,7 +52,9 @@ void tmr_setup_period(int timer, int ms){
     int num = number_prescaler(ms);
     if (timer == TIMER1){
         T1CONbits.TON = 0;
-        IFS0bits.T1IF = 0;
+        IFS0bits.T1IF = 0;          // interrupt flag
+        IEC0bits.T1IE = 0;          // disable TMR1 interrupt
+        
         TMR1 = 0;                   // reset the timer counter
         PR1 = set_prescaler(ms);    // set to compare the TMRx
         if (num == 3){
@@ -66,11 +69,13 @@ void tmr_setup_period(int timer, int ms){
         else if (num == 0){
             T1CONbits.TCKPS = 0;
         }
-        T1CONbits.TON = 1;  // start the timer
+        // start the timer
+        T1CONbits.TON = 1;  
     }
     else if (timer == TIMER2){
         T2CONbits.TON = 0;
         IFS0bits.T2IF = 0;
+        IEC0bits.T2IE = 1;          // Enable TMR2 interrupt
         TMR2 = 0;
         PR2 = set_prescaler(ms);
         
@@ -86,36 +91,36 @@ void tmr_setup_period(int timer, int ms){
         else if (num == 0){
             T2CONbits.TCKPS = 0;
         }
+        // Start the timer
         T2CONbits.TON = 1;
     }
 }
 
-// use the timer flag to wait until it has expired
+
+// TMR1 - Interrupts are disabled
+// TMR2 - Interrupts are enabled
 int tmr_wait_period(int timer){     
     if (timer == TIMER1){
-        T1CONbits.TON = 0;
         if (IFS0bits.T1IF == 1){
             IFS0bits.T1IF = 0;
             return 1;
         }
-        T1CONbits.TON = 1;
         while(IFS0bits.T1IF == 0){} // Until the flag is not raised 
         IFS0bits.T1IF = 0;
         return 0;
     }
     else if (timer == TIMER2){
-        T2CONbits.TON = 0;
         if (IFS0bits.T2IF == 1){
-            IFS0bits.T2IF = 0;
+//            IFS0bits.T2IF = 0;
             return 1;
         }
-        T2CONbits.TON = 1;
-        while(IFS0bits.T2IF == 0){}
-        IFS0bits.T2IF = 0;
+        while(IFS0bits.T2IF == 0)
+        {
+        }
+//        IFS0bits.T2IF = 0;
         return 0;
     }
 }
-
 
 void tmr_wait_ms(int timer, int ms)
 {

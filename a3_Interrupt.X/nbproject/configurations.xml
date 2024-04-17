@@ -19,7 +19,8 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>timer.c</itemPath>
-      <itemPath>main.c</itemPath>
+      <itemPath>ex_1.c</itemPath>
+      <itemPath>ex_2.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -195,6 +196,8 @@
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
       </C30Global>
+      <item path="ex_1.c" ex="true" overriding="false">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
