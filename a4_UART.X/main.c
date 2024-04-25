@@ -171,6 +171,7 @@ int main() {
     
     init_io();
     set_button_interrupts();
+    set_uart_1();
     
     //init LD2 as 0
     LATGbits.LATG9 = 0; 
