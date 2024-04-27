@@ -6,6 +6,9 @@
  */
 
 #include "xc.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "function.h"
 #include "timer.h"
 #include "uart.h"
@@ -45,7 +48,7 @@ int main() {
         // left-shifted EXAMPLE: a = 5 binary 101; b = 2; 
         //a << b = 10100 so a<<b = 20 (not in binary)
         
-        value = mag_MSB | mag_LSB;  // and OR with the previosly found masked
+        value = mag_MSB | mag_LSB;  // and OR with the previously found masked
         value = value/8;            // divided by 8 to get the correct scale
         
         sprintf(buffer, "$MAGX= %d* \0", (int16_t)value);
