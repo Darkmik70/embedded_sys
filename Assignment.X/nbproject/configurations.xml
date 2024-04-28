@@ -5,9 +5,8 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>function.h</itemPath>
-      <itemPath>spi.h</itemPath>
       <itemPath>timer.h</itemPath>
-      <itemPath>uart.h</itemPath>
+      <itemPath>init.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -23,10 +22,9 @@
                    projectFiles="true">
       <itemPath>timer.c</itemPath>
       <itemPath>function.c</itemPath>
-      <itemPath>spi.c</itemPath>
-      <itemPath>uart.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>interrupts.c</itemPath>
+      <itemPath>init.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -140,52 +138,6 @@
         <property key="coverage-enable" value=""/>
         <property key="stack-guidance" value="false"/>
       </C30-CO>
-      <C30-LD>
-        <property key="additional-options-use-response-files" value="false"/>
-        <property key="boot-eeprom" value="no_eeprom"/>
-        <property key="boot-flash" value="no_flash"/>
-        <property key="boot-ram" value="no_ram"/>
-        <property key="boot-write-protect" value="no_write_protect"/>
-        <property key="enable-check-sections" value="false"/>
-        <property key="enable-data-init" value="true"/>
-        <property key="enable-default-isr" value="true"/>
-        <property key="enable-handles" value="true"/>
-        <property key="enable-pack-data" value="true"/>
-        <property key="extra-lib-directories" value=""/>
-        <property key="fill-flash-options-addr" value=""/>
-        <property key="fill-flash-options-const" value=""/>
-        <property key="fill-flash-options-how" value="0"/>
-        <property key="fill-flash-options-inc-const" value="1"/>
-        <property key="fill-flash-options-increment" value=""/>
-        <property key="fill-flash-options-seq" value=""/>
-        <property key="fill-flash-options-what" value="0"/>
-        <property key="general-code-protect" value="no_code_protect"/>
-        <property key="general-write-protect" value="no_write_protect"/>
-        <property key="generate-cross-reference-file" value="false"/>
-        <property key="heap-size" value=""/>
-        <property key="input-libraries" value=""/>
-        <property key="linker-stack" value="true"/>
-        <property key="linker-symbols" value=""/>
-        <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-        <property key="no-ivt" value="false"/>
-        <property key="oXC16ld-extra-opts" value=""/>
-        <property key="oXC16ld-fill-upper" value="0"/>
-        <property key="oXC16ld-force-link" value="false"/>
-        <property key="oXC16ld-no-smart-io" value="false"/>
-        <property key="oXC16ld-nostdlib" value="false"/>
-        <property key="oXC16ld-stackguard" value="16"/>
-        <property key="preprocessor-macros" value=""/>
-        <property key="remove-unused-sections" value="false"/>
-        <property key="report-memory-usage" value="true"/>
-        <property key="secure-eeprom" value="no_eeprom"/>
-        <property key="secure-flash" value="no_flash"/>
-        <property key="secure-ram" value="no_ram"/>
-        <property key="secure-write-protect" value="no_write_protect"/>
-        <property key="stack-size" value="16"/>
-        <property key="symbol-stripping" value=""/>
-        <property key="trace-symbols" value=""/>
-        <property key="warn-section-align" value="false"/>
-      </C30-LD>
       <C30Global>
         <property key="combine-sourcefiles" value="false"/>
         <property key="common-include-directories" value=""/>

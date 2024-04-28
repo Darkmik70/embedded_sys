@@ -6,22 +6,21 @@
  */
 
 #include "xc.h"
+#include "function.h"
+#include "timer.h"
+#include "init.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "function.h"
-#include "timer.h"
-#include "uart.h"
-#include "spi.h"
 #include <math.h>
 
-double magneticNORTH(unsigned int x_avg, unsigned int y_avg){
+double magneticNORTH(int x_avg, int y_avg){
     double north;
     north = atan2(y_avg,x_avg);
     return north;
 }
 
-int axis(char type){
+int16_t axis(char type){
     int16_t mag_LSB,mag_MSB,value;
     //char buffer[20];
     
@@ -51,14 +50,8 @@ int axis(char type){
     value = mag_MSB | mag_LSB; // and OR with the previously found masked
     value = value / 8; // divided by 8 to get the correct scale
 
-    //sprintf(buffer, "$MAGX= %d* \0", (int16_t) value);
-    //for (int i = 0; buffer[i] != '\0'; i++) {
-    //    while (U1STAbits.UTXBF == 1);
-    //    U1TXREG = buffer[i];
-    //}
-
     CS3 = 1;
-    tmr_wait_ms(TIMER1, 200);
+    tmr_wait_ms(TIMER1, 50);
     return (int)value;
 }
 
