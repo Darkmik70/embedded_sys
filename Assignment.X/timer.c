@@ -111,7 +111,7 @@
         IFS0bits.T3IF = 0;  // clear Timer3 Interrupt Flag
         
         // Uncomment if the interrupt if use
-        IEC0bits.T3IE = 1;  // enable Timer3 Interrupt
+        //IEC0bits.T3IE = 1;  // enable Timer3 Interrupt
         
         T3CONbits.TON = 1;  // start the timer
     }
@@ -137,7 +137,7 @@
         IFS1bits.T4IF = 0;  // clear Timer4 Interrupt Flag
         
         // Uncomment this line is the interrupt are use
-        IEC1bits.T4IE = 1;  // enable Timer4 Interrupt
+        //IEC1bits.T4IE = 1;  // enable Timer4 Interrupt
         
         T4CONbits.TON = 1;  // start the timer
     }

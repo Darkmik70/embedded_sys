@@ -14,16 +14,31 @@
 #include <string.h>
 #include <math.h>
 
-double magneticNORTH(int x_avg, int y_avg){
+// TIMER2 AND TIMER 3 are use in the spi and algorithm
+
+void magneticNORTH(int x_avg, int y_avg) {
     double north;
-    north = atan2(y_avg,x_avg);
-    return north;
+    char buffer[10];
+    north = atan2(y_avg, x_avg);
+    north = north * (180.0 / M_PI);
+    sprintf(buffer, "$YAW, %d* \0", (int) north);
+    for (int j = 0; buffer[j] != '\0'; j++) {
+        while (U1STAbits.UTXBF == 1);
+        U1TXREG = buffer[j];
+    }
+}
+
+/**
+ * Use to simulate an algorithm that takes 7 ms to be completed
+ * @param None
+ * @return None
+ */
+void algortihm(){
+    tmr_setup_period(TIMER3, 7);
 }
 
 int16_t axis(char type){
-    int16_t mag_LSB,mag_MSB,value;
-    //char buffer[20];
-    
+    int16_t mag_LSB,mag_MSB,value;  
     CS3 = 0;
     
     switch(type){
@@ -51,7 +66,6 @@ int16_t axis(char type){
     value = value / 8; // divided by 8 to get the correct scale
 
     CS3 = 1;
-    tmr_wait_ms(TIMER1, 50);
     return (int)value;
 }
 
@@ -68,7 +82,9 @@ int main() {
     
     //int16_t x,y,z;
     int16_t x_avg,y_avg,z_avg;
-    int16_t north;
+    
+    tmr_setup_period(TIMER1,10);
+    
     
     char buffer[50];
     
@@ -81,25 +97,20 @@ int main() {
             x_avg = axis('x') + x_avg;
             y_avg = axis('y') + y_avg;
             z_avg = axis('z') + z_avg;
+            tmr_wait_ms(TIMER4,100);
         }
         
         x_avg = x_avg/5;
         y_avg = y_avg/5;
         z_avg = z_avg/5;
         
-        sprintf(buffer, "$VALORE %d, %d, %d  \0", (int16_t)x_avg,(int16_t)y_avg,(int16_t)x_avg);
+        sprintf(buffer, "$MAG, %d, %d, %d*  \0", (int16_t)x_avg,(int16_t)y_avg,(int16_t)x_avg);
         for (int i = 0; buffer[i] != '\0'; i++) {
             while (U1STAbits.UTXBF == 1);
             U1TXREG = buffer[i];
         }
         
-        north = magneticNORTH(x_avg,y_avg);
-        north = (int)north * (180.0/ M_PI);
-        sprintf(buffer, "$YAW, %d* \0", (int)north);
-        for (int j = 0; buffer[j] != '\0'; j++) {
-            while (U1STAbits.UTXBF == 1);
-            U1TXREG = buffer[j];
-        }
+        magneticNORTH(x_avg,y_avg);
         
     }
      
