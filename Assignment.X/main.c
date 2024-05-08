@@ -84,12 +84,12 @@ int read_axis(char type){
 
 void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
     IFS1bits.INT1IF = 0;    // clear the interrupt flag
-    // case 1 
     // uart write
     if (uart_msg[itr] == '\0') {
         // message is finished, zero all values and set flag to 0
         itr = 0;
         is_msg_ready = 0;
+        U1TXREG = 'd'; // Test if we are always getting null
     }
     else  {
         // send one char and increment iterator
@@ -135,7 +135,7 @@ int assignment() {
         }
 
         /* prepare message for uart */
-        if(uart_cnt == UART_SEND && !is_msg_ready){      //ideally triggers every 200 ms
+        if(uart_cnt == UART_SEND && is_msg_ready == 0){      //ideally triggers every 200 ms
             //calculate MAG and YAW
             x_avg = (buffer_x[0] + buffer_x[1] + buffer_x[2] + buffer_x[3] + buffer_x[4]) / 5.0;
             y_avg = (buffer_y[0] + buffer_y[1] + buffer_y[2] + buffer_y[3] + buffer_y[4]) / 5.0;
@@ -154,7 +154,7 @@ int assignment() {
         uart_cnt++;
 
         // check whether deadline is missed 
-        while(is_msg_ready && get_timer_status(TIMER1) == 0) {
+        while(is_msg_ready == 1 && get_timer_status(TIMER1) == 0) {
             // trigger the interrupt to write on uart
             IFS1bits.INT1IF = 1;
         }
