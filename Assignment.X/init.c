@@ -70,8 +70,8 @@ void initSPI() {
     RPOR11bits.RP108R = 0b000110; // SCK1 - RF12 - RP108;
 
     // Mapping the chipset, they are all inactive
-    TRISBbits.TRISB3 = 0; // accelerometer set as output
-    TRISBbits.TRISB4 = 0; // gyroscope set as output 
+    //TRISBbits.TRISB3 = 0; // accelerometer set as output
+    //TRISBbits.TRISB4 = 0; // gyroscope set as output 
     TRISDbits.TRISD6 = 0; // magnetometer set as output
 
     CS1 = 1; // accelerometer is inactive

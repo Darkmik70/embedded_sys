@@ -18,11 +18,20 @@
 #define UART_SEND 20
 
 int itr;
-char uart_msg[80];
-char uart_buff[80];
+char uart_msg[80]; 
 
 int is_msg_ready; // Flag to create a new uart_msg
 
+//// Interrupt routine associated to the receivement of message on the UART
+//void __attribute__((__interrupt__, __auto_psv__)) _U1TXInterrupt(){
+//    IFS0bits.U1TXIF = 0;
+//    U1TXREG = uart_msg[itr];
+//    itr++;
+//    if (uart_msg[itr] == '\0') {
+//        itr = 0;
+//        is_msg_ready = 1;
+//    }
+//}
 
 /**
  * Use to simulate an algorithm that takes 7 ms to be completed
@@ -60,9 +69,16 @@ int read_axis(char type){
     mag_LSB = spi_write(0x00); // read the value of the LSB
     mag_MSB = spi_write(0x00); // read the value of the MSB
 
-    // put the LSB and MSB together in a two byte signed integer
-    mag_LSB = mag_LSB & 0b11111000; // clear the three least significant 
-                                    // bits by ANDing with a mask
+    if (type == 'z') {
+        // put the LSB and MSB together in a two byte signed integer
+        mag_LSB = mag_LSB & 0b11111110; // clear the three least significant 
+                                        // bits by ANDing with a mask
+    }
+    else{
+        // put the LSB and MSB together in a two byte signed integer
+        mag_LSB = mag_LSB & 0b11111000; // clear the three least significant 
+                                        // bits by ANDing with a mask
+    }
 
     mag_MSB = mag_MSB << 8; // left-shift by 8 the MSB
 
@@ -87,7 +103,6 @@ void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
         U1TXREG = uart_msg[itr];
         itr++;
     }
-
     toggleLed(1);
 }
 
@@ -95,11 +110,11 @@ int assignment() {
     int uart_cnt = 0;   // counter to write on uart
     int spi_cnt = 0;    // counter to read from spi
     int spi_itr = 0;    // iterator to fill buffers
-
-    int buffer_x[5] = {0};
-    int buffer_y[5] = {0};
-    int buffer_z[5] = {0};
-    int x_avg = 0, y_avg = 0, z_avg =0;
+    
+    int16_t buffer_x[5] = {0};
+    int16_t buffer_y[5] = {0};
+    int16_t buffer_z[5] = {0};
+    int16_t x_avg = 0, y_avg = 0, z_avg =0;
     
     uart_msg[0] = 'a';      //  initialize message for uart with some value
     itr = 0;                // init iterator for uart_msg
@@ -121,6 +136,11 @@ int assignment() {
             buffer_x[spi_itr] = read_axis('x');
             buffer_y[spi_itr] = read_axis('y');
             buffer_z[spi_itr] = read_axis('z');
+            
+//            x_avg = read_axis('x')+x_avg;
+//            y_avg = read_axis('y')+y_avg;
+//            z_avg = read_axis('z')+z_avg;
+            
             spi_itr++;
 
             spi_cnt = 0;
@@ -129,29 +149,38 @@ int assignment() {
         /* prepare message for uart */
         if(uart_cnt == UART_SEND && is_msg_ready == 0){      //ideally triggers every 200 ms
             //calculate MAG and YAW
-            x_avg = (buffer_x[0] + buffer_x[1] + buffer_x[2] + buffer_x[3] + buffer_x[4]) / 5.0;
-            y_avg = (buffer_y[0] + buffer_y[1] + buffer_y[2] + buffer_y[3] + buffer_y[4]) / 5.0;
-            z_avg = (buffer_z[0] + buffer_z[1] + buffer_z[2] + buffer_z[3] + buffer_z[4]) / 5.0;
+            x_avg = (buffer_x[0] + buffer_x[1] + buffer_x[2] + buffer_x[3] + buffer_x[4]) / (int16_t)5;
+            y_avg = (buffer_y[0] + buffer_y[1] + buffer_y[2] + buffer_y[3] + buffer_y[4]) / (int16_t)5;
+            z_avg = (buffer_z[0] + buffer_z[1] + buffer_z[2] + buffer_z[3] + buffer_z[4]) / (int16_t)5;
+//            x_avg = x_avg/5;
+//            y_avg = y_avg/5;
+//            z_avg = z_avg/5;
+            
             int north = get_magnetic_north(x_avg,y_avg);
             // set the message        
-             memset(uart_msg, 0, sizeof(uart_msg));
-             sprintf(uart_msg, "$MAG,%d,%d,%d* $YAW,%d", x_avg, y_avg, z_avg, north);
+            //memset(uart_msg, 0, sizeof(uart_msg));
+            sprintf(uart_msg, "$MAG,%d,%d,%d* $YAW,%d", (int16_t)x_avg, (int16_t)y_avg, (int16_t)z_avg, north);
+            
+//            x_avg = 0;
+//            y_avg = 0;
+//            z_avg = 0;
             
             // allow for sending message
             is_msg_ready = 1;
             uart_cnt = 0;
         }
-
+        
         //increment counters
         spi_cnt++;
         uart_cnt++;
 
         // check whether deadline is missed 
         while(is_msg_ready == 1 && get_timer_status(TIMER1) == 0) {
+            while (U1STAbits.UTXBF == 1) {}
             // trigger the interrupt to write on uart
             IFS1bits.INT1IF = 1;
         }
-        // wait for the remainder of time;
+        // wait for the remainer of time;
         tmr_wait_period(TIMER1);
     }
     return 0;
