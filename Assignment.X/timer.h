@@ -67,6 +67,14 @@
 // TODO Insert declarations or function prototypes (right here) to leverage 
 // live documentation
 
+/**
+ * @brief Get the timer's interrupt flag state.
+ * 
+ * @param timer - timer ID
+ * @return int - Interrupt state of the timer 1: TIMER EXPIRED 0: TIMER ONGOING
+ */
+int get_timer_status(int timer);
+
 // set the prescaler
 int set_prescaler(int ms);
 

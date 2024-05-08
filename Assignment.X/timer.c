@@ -143,12 +143,25 @@
     }
 }
 
+
+int get_timer_status(int timer) {
+    switch(timer) {
+        case TIMER1:
+            return IFS0bits.T1IF;
+        case TIMER2:
+            return IFS0bits.T2IF;
+        case TIMER3:
+            return IFS0bits.T3IF;
+        case TIMER4:
+            return IFS1bits.T4IF;
+        }
+}
+
 /**
  * Function that control if the timer it's expired and also wait for the timer to 
  * expire the period impose
  * @param timer: Name of the TIMER
- * @return 1: TIMER EXPIRED
- * @return 0: TIMER ONGOING
+ * @return 1: TIMER EXPIRED 0: TIMER ONGOING
  */
 int tmr_wait_period(int timer){     
     if (timer == TIMER1){
@@ -156,6 +169,7 @@ int tmr_wait_period(int timer){
             IFS0bits.T1IF = 0;
             return 1;
         }
+        // wait for the flag to be raised
         while(IFS0bits.T1IF == 0){} // Until the flag is not raised 
         IFS0bits.T1IF = 0;
     }
@@ -210,4 +224,3 @@ void tmr_wait_ms(int timer, int ms){
         }
     }    
 }
-
