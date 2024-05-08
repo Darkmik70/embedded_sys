@@ -18,20 +18,11 @@
 #define UART_SEND 20
 
 int itr;
-char uart_msg[80]; 
+char uart_msg[80];
+char uart_buff[80];
 
 int is_msg_ready; // Flag to create a new uart_msg
 
-//// Interrupt routine associated to the receivement of message on the UART
-//void __attribute__((__interrupt__, __auto_psv__)) _U1TXInterrupt(){
-//    IFS0bits.U1TXIF = 0;
-//    U1TXREG = uart_msg[itr];
-//    itr++;
-//    if (uart_msg[itr] == '\0') {
-//        itr = 0;
-//        is_msg_ready = 1;
-//    }
-//}
 
 /**
  * Use to simulate an algorithm that takes 7 ms to be completed
@@ -103,7 +94,8 @@ void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
 int assignment() {
     int uart_cnt = 0;   // counter to write on uart
     int spi_cnt = 0;    // counter to read from spi
-    
+    int spi_itr = 0;    // iterator to fill buffers
+
     int buffer_x[5] = {0};
     int buffer_y[5] = {0};
     int buffer_z[5] = {0};
@@ -120,18 +112,18 @@ int assignment() {
         algorithm();
 
         /* read from spi */
-        if(spi_cnt == SPI_READ){        // triggers every 40ms
-            if(spi_cnt < 5){
-                // fill up buffers
-                buffer_x[spi_cnt] = read_axis('x');
-                buffer_y[spi_cnt] = read_axis('y');
-                buffer_z[spi_cnt] = read_axis('z');
+        if(spi_cnt == SPI_READ){       // triggers every 40ms
+            // check if itr reached its max value
+            if (spi_itr == 5) {
+                spi_itr = 0;
             }
-            else {
-                // By doing this we skip one period when we could read
-                spi_cnt = 0;
-            
-            }
+            // fill up buffers
+            buffer_x[spi_itr] = read_axis('x');
+            buffer_y[spi_itr] = read_axis('y');
+            buffer_z[spi_itr] = read_axis('z');
+            spi_itr++;
+
+            spi_cnt = 0;
         }
 
         /* prepare message for uart */
@@ -147,8 +139,9 @@ int assignment() {
             
             // allow for sending message
             is_msg_ready = 1;
+            uart_cnt = 0;
         }
-        
+
         //increment counters
         spi_cnt++;
         uart_cnt++;
