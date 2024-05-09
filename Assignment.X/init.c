@@ -27,9 +27,13 @@ void initUART() {
     U1BRG = (int) BRGVAL; // baud rate register
 
     // interrupt procedure 
-    IFS0bits.U1RXIF = 0; // Flag clear Interrupt U1RX
-    IEC0bits.U1RXIE = 1; // Enable the interrupt U1RX
-
+//    IFS0bits.U1RXIF = 0; // Flag clear Interrupt U1RX
+//    IEC0bits.U1RXIE = 1; // Enable the interrupt U1RX
+    U1STAbits.UTXISEL0 = 0;
+    U1STAbits.UTXISEL1 = 0;
+    IFS0bits.U1TXIF = 0;
+    //IEC0bits.U1TXIE = 1;
+    
     // enable the UART
     U1MODEbits.UARTEN = 1; // Enable UART
     U1STAbits.UTXEN = 1; // Enable UART U1TX (must be after UARTEN)

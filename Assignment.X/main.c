@@ -24,24 +24,13 @@ char uart_buffer[80];
 
 int is_msg_ready; // Flag to create a new uart_msg
 
-//// Interrupt routine associated to the receivement of message on the UART
-//void __attribute__((__interrupt__, __auto_psv__)) _U1TXInterrupt(){
-//    IFS0bits.U1TXIF = 0;
-//    U1TXREG = uart_msg[itr];
-//    itr++;
-//    if (uart_msg[itr] == '\0') {
-//        itr = 0;
-//        is_msg_ready = 1;
-//    }
-//}
-
 /**
  * Use to simulate an algorithm that takes 7 ms to be completed
  * @param None
  * @return None
  */
 void algorithm(){
-    tmr_setup_period(TIMER4, 7);
+    tmr_wait_ms(TIMER4, 7);
 }
 
 
@@ -88,11 +77,11 @@ int read_axis(char type){
     value = value / 8; // divided by 8 to get the correct scale
 
     CS3 = 1;
-    return (int)value;
+    return value;
 }
 
-void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
-    IFS1bits.INT1IF = 0;    // clear the interrupt flag
+void __attribute__((__interrupt__, __auto_psv__))_U1TXInterrupt(){
+    IFS0bits.U1TXIF = 0;    // clear the interrupt flag
     // uart write
     if (uart_msg[itr] == '\0') {
         // message is finished, zero all values and set flag to 0
@@ -149,13 +138,13 @@ int assignment() {
         /* prepare message for uart */
         if(uart_cnt == UART_SEND){      //ideally triggers every 200 ms
             //calculate MAG and YAW
-            x_avg = (buffer_x[0] + buffer_x[1] + buffer_x[2] + buffer_x[3] + buffer_x[4]) / 5.0;
-            y_avg = (buffer_y[0] + buffer_y[1] + buffer_y[2] + buffer_y[3] + buffer_y[4]) / 5.0;
-            z_avg = (buffer_z[0] + buffer_z[1] + buffer_z[2] + buffer_z[3] + buffer_z[4]) / 5.0;
+            x_avg = (buffer_x[0] + buffer_x[1] + buffer_x[2] + buffer_x[3] + buffer_x[4]) / 5;
+            y_avg = (buffer_y[0] + buffer_y[1] + buffer_y[2] + buffer_y[3] + buffer_y[4]) / 5;
+            z_avg = (buffer_z[0] + buffer_z[1] + buffer_z[2] + buffer_z[3] + buffer_z[4]) / 5;
             
             int north = get_magnetic_north(x_avg,y_avg);
             // set the message        
-            sprintf(uart_buffer, "$MAG,%d,%d,%d* $YAW,%d", (int16_t)x_avg, (int16_t)y_avg, (int16_t)z_avg, north);
+            sprintf(uart_buffer, "$MAG,%d,%d,%d* $YAW,%d", x_avg, y_avg, z_avg, north);
             
             // allow for sending message
             is_msg_ready = 1;
@@ -167,19 +156,21 @@ int assignment() {
         uart_cnt++;
 
         // check whether deadline is missed 
-        while(is_msg_ready == 1 && get_timer_status(TIMER1) == 0) {
+        while(is_msg_ready == 1) {
             if (uart_msg[0] == '\0') {
                 strcpy(uart_msg, uart_buffer);
                 toggleLed(1);
+                IEC0bits.U1TXIE = 1;
             }
-            while (U1STAbits.UTXBF == 1) {}
+            //while (U1STAbits.UTXBF == 1) {}
             // trigger the interrupt to write on uart
-            IFS1bits.INT1IF = 1;
+            //IFS1bits.INT1IF = 1;
             
         }
         // wait for the remainer of time;
-        if (tmr_wait_period(TIMER1) == 1)
-        {toggleLed(2);}
+        if (tmr_wait_period(TIMER1) == 1){
+            toggleLed(2);
+        }
     }
     return 0;
 }
@@ -192,8 +183,10 @@ int main(){
     initSPI();
         
     INTCON2bits.GIE = 1;    // set global interrupt enable
-    IFS1bits.INT1IF = 0;    // clear the interrupt flag
-    IEC1bits.INT1IE = 1;    // enable interrupt
+//    IFS1bits.INT1IF = 0;    // clear the interrupt flag
+//    IEC1bits.INT1IE = 1;    // enable interrupt
+//    IFS0bits.U1TXIF = 0;
+//    IEC0bits.U1TXIE = 1;
 
     // Pass from the suspend mode of the magnetometer to the sleep and then 
     // to the active mode
