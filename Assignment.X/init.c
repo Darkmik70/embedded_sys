@@ -32,7 +32,7 @@ void initUART() {
     U1STAbits.UTXISEL0 = 0;
     U1STAbits.UTXISEL1 = 0;
     IFS0bits.U1TXIF = 0;
-    //IEC0bits.U1TXIE = 1;
+    IEC0bits.U1TXIE = 1;
     
     // enable the UART
     U1MODEbits.UARTEN = 1; // Enable UART
