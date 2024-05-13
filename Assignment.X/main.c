@@ -18,8 +18,8 @@
 #define UART_SEND 20
 
 int itr;
-char uart_msg[80]; 
-char uart_buffer[80];
+char uart_msg[50]; 
+char uart_buffer[50];
 
 
 int is_msg_ready; // Flag to create a new uart_msg
@@ -71,12 +71,8 @@ int read_axis(char type){
                                         // bits by ANDing with a mask
     }
     
-    if(type == 'z'){
-        mag_MSB = mag_MSB << 2; // left-shift by 2 the MSB   
-    }
-    else{
+ 
         mag_MSB = mag_MSB << 8; // left-shift by 8 the MSB
-    }
     value = mag_MSB | mag_LSB; // and OR with the previously found masked
     
     if(type == 'z'){
@@ -108,7 +104,9 @@ void __attribute__((__interrupt__, __auto_psv__))_U1TXInterrupt(){
     }
 }
 
-int assignment() {
+int main(){
+    
+        
     int uart_cnt = 0;   // counter to write on uart
     int spi_cnt = 0;    // counter to read from spi
     int spi_itr = 0;    // iterator to fill buffers
@@ -117,6 +115,24 @@ int assignment() {
     int16_t buffer_y[5] = {0};
     int16_t buffer_z[5] = {0};
     int16_t x_avg = 0, y_avg = 0, z_avg =0;
+    
+    initializeIO();
+    initUART();
+    initSPI();
+        
+    INTCON2bits.GIE = 1;    // set global interrupt enable
+//    IFS1bits.INT1IF = 0;    // clear the interrupt flag
+//    IEC1bits.INT1IE = 1;    // enable interrupt
+//    IFS0bits.U1TXIF = 0;
+//    IEC0bits.U1TXIE = 1;
+
+    // Pass from the suspend mode of the magnetometer to the sleep and then 
+    // to the active mode
+    setACTIVEmode('M');
+    
+    // 25Hz rate of the magnetometer 
+    spi_write(0x4C);
+    spi_write(0b00110000);
 
     memset(uart_msg, 0, sizeof(uart_msg));
     memset(uart_buffer, 0, sizeof(uart_buffer));
@@ -159,7 +175,7 @@ int assignment() {
             // allow for sending message
             is_msg_ready = 1;
             uart_cnt = 0;
-            toggleLed(1);
+            //toggleLed(1);
         }
         
         //increment counters
@@ -169,17 +185,10 @@ int assignment() {
         // check whether deadline is missed 
         if(is_msg_ready == 1) {
             if (uart_msg[0] == '\0') {
-//                toggleLed(2);
                 strcpy(uart_msg, uart_buffer);
                 itr++;
                 U1TXREG = uart_msg[0];
-                //toggleLed(1);
-//                IEC0bits.U1TXIE = 1;
             }
-            //while (U1STAbits.UTXBF == 1) {}
-            // trigger the interrupt to write on uart
-            //IFS1bits.INT1IF = 1;
-            
         }
         // wait for the remainer of time;
         if (tmr_wait_period(TIMER1) == 1){
@@ -187,29 +196,6 @@ int assignment() {
         }
     }
     return 0;
-}
-
-
-int main(){
     
-    initializeIO();
-    initUART();
-    initSPI();
-        
-    INTCON2bits.GIE = 1;    // set global interrupt enable
-//    IFS1bits.INT1IF = 0;    // clear the interrupt flag
-//    IEC1bits.INT1IE = 1;    // enable interrupt
-//    IFS0bits.U1TXIF = 0;
-//    IEC0bits.U1TXIE = 1;
-
-    // Pass from the suspend mode of the magnetometer to the sleep and then 
-    // to the active mode
-    setACTIVEmode('M');
-    
-    // 25Hz rate of the magnetometer 
-    spi_write(0x4C);
-    spi_write(0b00110000);
-    
-    assignment();
 }
 

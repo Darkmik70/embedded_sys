@@ -51,7 +51,7 @@ void initSPI() {
     SPI1CON1bits.MSTEN = 1; // enable the master mode
     SPI1CON1bits.MODE16 = 0; // Comunication is byte-wide (8-bit)
     SPI1CON1bits.PPRE = 0; // Primary prescaler
-    SPI1CON1bits.SPRE = 6; // Secondary prescaler
+    SPI1CON1bits.SPRE = 5; // Secondary prescaler (da guardare come funziona)
     //SPI1CON1bits.CKP specifies the IDLE value of the clock (high)
 
     SPI1STATbits.SPIEN = 1; // Enable the SPI peripheral
