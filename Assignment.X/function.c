@@ -1,6 +1,5 @@
 /*
  * File:   function.c
- * Author: RomiC
  *
  * Created on March 23, 2024, 12:53 PM
  */

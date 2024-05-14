@@ -1,6 +1,5 @@
 /*
  * File:   main.c
- * Author: RomiC
  *
  * Created on April 27, 2024, 5:42 PM
  */
@@ -34,15 +33,16 @@ void algorithm(){
 }
 
 
-double get_magnetic_north(int x_avg, int y_avg) {
+double get_magnetic_north(double x_avg, double y_avg) {
     double north;
+    
     north = atan2(y_avg, x_avg);
     north = north * (180.0 / M_PI);
     return north;
 }
 
 
-int read_axis(char type){
+ double read_axis(char type){
     int16_t mag_LSB,mag_MSB,value;  
     CS3 = 0;
     
@@ -111,10 +111,10 @@ int main(){
     int spi_cnt = 0;    // counter to read from spi
     int spi_itr = 0;    // iterator to fill buffers
     
-    int16_t buffer_x[5] = {0};
-    int16_t buffer_y[5] = {0};
-    int16_t buffer_z[5] = {0};
-    int16_t x_avg = 0, y_avg = 0, z_avg =0;
+    double buffer_x[5] = {0};
+    double buffer_y[5] = {0};
+    double buffer_z[5] = {0};
+    double x_avg = 0, y_avg = 0, z_avg =0;
     
     initializeIO();
     initUART();
@@ -168,9 +168,9 @@ int main(){
             y_avg = (buffer_y[0] + buffer_y[1] + buffer_y[2] + buffer_y[3] + buffer_y[4]) / 5;
             z_avg = (buffer_z[0] + buffer_z[1] + buffer_z[2] + buffer_z[3] + buffer_z[4]) / 5;
             
-            int north = get_magnetic_north(x_avg,y_avg);
+            double north = get_magnetic_north(x_avg,y_avg);
             // set the message        
-            sprintf(uart_buffer, "$MAG,%d,%d,%d* $YAW,%d", x_avg, y_avg, z_avg, north);
+            sprintf(uart_buffer, "$MAG,%.f,%.f,%.f* $YAW,%.2f", x_avg, y_avg, z_avg, north);
             
             // allow for sending message
             is_msg_ready = 1;

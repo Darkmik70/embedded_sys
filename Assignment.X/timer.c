@@ -1,6 +1,5 @@
 /*
  * File:   timer.c
- * Author: RomiC
  *
  * Created on March 21, 2024, 2:24 PM
  */
@@ -155,6 +154,7 @@ int get_timer_status(int timer) {
         case TIMER4:
             return IFS1bits.T4IF;
         }
+    return -1;
 }
 
 /**

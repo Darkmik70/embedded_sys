@@ -21,7 +21,6 @@
 
 /* 
  * File:   Initialized functions on the main file
- * Author: Romi C. Alessandro Trovatello
  * Comments: Function to simplified the code in the main code, example LED1 
  * instead of calling the LAT we just put the name define here
  * Revision history: 

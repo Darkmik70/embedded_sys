@@ -21,7 +21,6 @@
 
 /* 
  * File:   timer file
- * Author: RomiC aless
  * Comments:
  * Revision history: 
  */

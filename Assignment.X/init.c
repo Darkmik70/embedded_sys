@@ -1,6 +1,5 @@
 /*
  * File:   init.c
- * Author: RomiC
  *
  * Created on April 28, 2024, 12:36 PM
  */

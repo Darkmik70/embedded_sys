@@ -21,7 +21,6 @@
 
 /* 
  * File:   Init
- * Author: RomiC.
  * Comments: This are the initialization function of the project and also some 
  * function use to configurate the mikro. We have to make also the circular 
  * and all the interrupts thing. 
