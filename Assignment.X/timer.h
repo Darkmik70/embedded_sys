@@ -81,7 +81,7 @@ int set_prescaler(int ms);
 int number_prescaler(int ms);
 
 // set up the timer to count for the specified amount of milliseconds
-void tmr_setup_period(int timer, int ms);
+void tmr_setup_period(int timer, int ms, int enable_interrupt);
 
 // use the timer flag to wait until it has expired
 int tmr_wait_period(int timer);

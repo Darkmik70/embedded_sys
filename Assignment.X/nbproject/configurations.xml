@@ -23,7 +23,6 @@
       <itemPath>timer.c</itemPath>
       <itemPath>function.c</itemPath>
       <itemPath>main.c</itemPath>
-      <itemPath>interrupts.c</itemPath>
       <itemPath>init.c</itemPath>
     </logicalFolder>
   </logicalFolder>
