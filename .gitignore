@@ -7,3 +7,6 @@
 /a2_Timers.X/dist/default/production
 /a2_Timers.X/dist
 /a4_UART.X/.generated_files
+/PWM.X/build/
+/PWM.X/dist/
+>>>>>>> Stashed changes
