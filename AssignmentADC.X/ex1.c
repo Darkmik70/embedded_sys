@@ -15,7 +15,7 @@
 #define ADC_RESOLUTION 1024 // ADC 10-bit resolution
 
 void remapPIN() {
-    ANSELBbits.ANSB0 = 1;
+    ANSELBbits.ANSB11 = 1; // AN11 analog pin for battery
 }
 void setADC() {
     AD1CON3bits.ADCS = 8; // Setting ADC conversion clock
