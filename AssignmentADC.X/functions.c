@@ -20,8 +20,7 @@
         
 void initializeIO() {
     // all analog pins disabled
-    ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
-    
+    ANSELA = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
     // Set LD1 pin as output
     TRISAbits.TRISA0 = 0;
     

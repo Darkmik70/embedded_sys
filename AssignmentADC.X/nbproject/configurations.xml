@@ -26,7 +26,8 @@
         <itemPath>timer.c</itemPath>
         <itemPath>uart.c</itemPath>
       </logicalFolder>
-      <itemPath>main.c</itemPath>
+      <itemPath>ex2.c</itemPath>
+      <itemPath>ex1.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -202,6 +203,20 @@
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
       </C30Global>
+      <item path="ex1.c" ex="true" overriding="false">
+        <C30>
+        </C30>
+        <C30-AR>
+        </C30-AR>
+        <C30-AS>
+        </C30-AS>
+        <C30-CO>
+        </C30-CO>
+        <C30-LD>
+        </C30-LD>
+        <C30Global>
+        </C30Global>
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
