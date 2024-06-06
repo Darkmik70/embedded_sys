@@ -16,8 +16,7 @@
 
 void remapPIN() {
     ANSELBbits.ANSB0 = 1;
-    TRISBbits.TRISB4 = 0; // Set RB4 as output
-    //TRISBbits.TRISB11 = 1; // Set RB11 as input
+    TRISBbits.TRISB9 = 0; // Set RB11 as output
 }
 void setADC() {
     AD1CON3bits.ADCS = 8; // Setting ADC conversion clock
@@ -25,7 +24,7 @@ void setADC() {
     AD1CON1bits.SSRC = 7; // Automatic conversion start
     AD1CON3bits.SAMC = 16; // Sampling period     (ONLY FOR AUTOMATIC SAMPLING)
     AD1CON2bits.CHPS = 0; // Number of channel used (1 channel)
-    AD1CHS0bits.CH0SA = 0b101; // CH0 positive input is AN5
+    AD1CHS0bits.CH0SA = 14; // CH0 positive input is AN14
     
     AD1CON1bits.ADON = 1; // Turn on ADC
 }
@@ -69,7 +68,7 @@ int main(void) {
     set_UART1();
     setADC();
 
-    LATBbits.LATB4 = 1; // set EN pin high to work properly
+    LATBbits.LATB9 = 1; // set EN pin high to work properly
 
     while (1) {
         AD1CON1bits.DONE = 0;
