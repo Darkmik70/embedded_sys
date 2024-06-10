@@ -15,14 +15,66 @@
 void init_pwm();
 
 /**
- * Remaps pins to set OC1 for Output
+ * Driving forward
+ * Remaps pins to set OC1 as output
+ * RD4 - PWM D - Motors on the right
+ * RD2 - PWM B - Motors on the left
  */
 void remap_pins_drive_forward();
 
 /**
- * Remaps pins to set OC1 to RD4 and OC2 to RD2
+ * Driving in reverse
+ * Remaps pins to set OC1 as output
+ * RD3 - PWM C - Motors on the right
+ * RD1 - PWM A - Motors on the left
+ */
+void remap_pins_drive_backward();
+
+/**
+ * Counter-clockwise rotation
+ * Remaps pins to set OC1 as output
+ * RD4 - PWM D - Motors on the right forward
+ * RD1 - PWM A - Motors on the left in reverse
+ */
+void remap_pins_ccw();
+
+/**
+ * clockwise rotation
+ * Remaps pins to set OC1 as output
+ * RD3 - PWM C - Motors on the right in reverse
+ * RD2 - PWM B - Motors on the left forward
+ */
+void remap_pins_cw();
+
+/**
+ * driving and turning right (movement as an arc)
+ * Remaps pins to set OC1 as output
+ * RD3 - PWM C - Motors on the right in reverse
+ * RD2 - PWM B - Motors on the left forward
  */
 void remap_pins_turning();
+
+/**
+ * Perform a counter-clockwise rotation
+ * Remaps pins to set OC1 as output
+ * Configures OC1
+ */
+void rotate_ccw();
+
+/**
+ * Perform a clockwise rotation
+ * Remaps pins to set OC1 as output
+ * Configures OC1
+ */
+void rotate_cw();
+
+/**
+ * Configures OC1 for rotating
+ * Clears of the bits for safety, sets peripheral clock
+ * Selected duty cycle 100% with frequency 10 KHz
+ * Selects Edge aligned PWM mode
+ */
+void rotate();
 
 /**
  * Generates PWM to go forward.
@@ -51,21 +103,6 @@ void drive_right();
  */
 void drive_stop();
 
-
-/**
- * Remaps pins to set OC1 to RD4 and OC2 to RD2
- */
-void remap_pins_ccw();
-
-void remap_pins_drive_backward();
-
-void remap_pins_cw();
-
-void rotate_ccw();
-
-void rotate_cw();
-
-void rotate();
 
 
 

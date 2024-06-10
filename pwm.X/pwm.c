@@ -14,7 +14,10 @@ void init_pwm() {
 }
 
 /**
- * Remaps pins to set OC1 for Output
+ * Driving forward
+ * Remaps pins to set OC1 as output
+ * RD4 - PWM D - Motors on the right
+ * RD2 - PWM B - Motors on the left
  */
 void remap_pins_drive_forward() {
     /* map out for  output compare */
@@ -23,52 +26,75 @@ void remap_pins_drive_forward() {
 }
 
 /**
- * Remaps pins to set OC1 for Output
+ * Driving in reverse
+ * Remaps pins to set OC1 as output
+ * RD3 - PWM C - Motors on the right
+ * RD1 - PWM A - Motors on the left
  */
 void remap_pins_drive_backward() {
-    /* map out for  output compare */
     RPOR1bits.RP67R = 0b010000;     // RD3
     RPOR0bits.RP65R = 0b010000;     // RD1
 }
 
 /**
- * Remaps pins to set OC1 to RD4 and OC2 to RD2
- */
-void remap_pins_turning() {
-    /* map out for  output compare */
-    RPOR2bits.RP68R = 0b010000;         // RD4-PWMD outs OC1
-    RPOR1bits.RP66R = 0b010001;         // RD2-PWMB outs OC2
-}
-
-
-/**
- * Remaps pins to set OC1 to RD4 and OC2 to RD2
+ * Counter-clockwise rotation
+ * Remaps pins to set OC1 as output
+ * RD4 - PWM D - Motors on the right forward
+ * RD1 - PWM A - Motors on the left in reverse
  */
 void remap_pins_ccw() {
-    /* map out for  output compare */
-    RPOR2bits.RP68R = 0b010000;         // RD4-PWMD outs OC1
+    RPOR2bits.RP68R = 0b010000;        // RD4-PWMD outs OC1
     RPOR0bits.RP65R = 0b010000;        // RD1
 }
 
 /**
- * Remaps pins to set OC1 to RD4 and OC2 to RD2
+ * clockwise rotation
+ * Remaps pins to set OC1 as output
+ * RD3 - PWM C - Motors on the right in reverse
+ * RD2 - PWM B - Motors on the left forward
  */
 void remap_pins_cw() {
-    /* map out for  output compare */
     RPOR1bits.RP67R =0b010000;     // RD3
     RPOR1bits.RP66R = 0b010000;;   // RD2-PWMB outs OC1
 }
 
+/**
+ * driving and turning right (movement as an arc)
+ * Remaps pins to set OC1 as output
+ * RD3 - PWM C - Motors on the right in reverse
+ * RD2 - PWM B - Motors on the left forward
+ */
+void remap_pins_turning() {
+    RPOR2bits.RP68R = 0b010000;         // RD4-PWMD outs OC1
+    RPOR1bits.RP66R = 0b010001;         // RD2-PWMB outs OC2
+}
+
+/**
+ * Perform a counter-clockwise rotation
+ * Remaps pins to set OC1 as output
+ * Configures OC1
+ */
 void rotate_ccw() {
     remap_pins_ccw();
     rotate();
 }
 
+/**
+ * Perform a clockwise rotation
+ * Remaps pins to set OC1 as output
+ * Configures OC1
+ */
 void rotate_cw() {
     remap_pins_cw();
     rotate();
 }
 
+/**
+ * Configures OC1 for rotating
+ * Clears of the bits for safety, sets peripheral clock
+ * Selected duty cycle 100% with frequency 10 KHz
+ * Selects Edge aligned PWM mode
+ */
 void rotate() {
     // Clear of bits
     OC1CON1 = 0; 
