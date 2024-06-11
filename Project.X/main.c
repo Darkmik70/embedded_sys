@@ -5,37 +5,6 @@
  * Created on 9 giugno 2024, 22.19
  */
 
-// FOSC
-#pragma config FPR = XT_PLL16          // Primary Oscillator Mode (XT w/PLL 16x)
-#pragma config FOS = PRI                // Oscillator Source (Primary Oscillator)
-#pragma config FCKSMEN = CSW_FSCM_OFF   // Clock Switching and Monitor (Sw Disabled, Mon Disabled)
-
-// FWDT
-#pragma config FWPSB = WDTPSB_16        // WDT Prescaler B (1:16)
-#pragma config FWPSA = WDTPSA_512       // WDT Prescaler A (1:512)
-#pragma config WDT = WDT_OFF            // Watchdog Timer (Disabled)
-
-// FBORPOR
-#pragma config FPWRT = PWRT_64          // POR Timer Value (64ms)
-#pragma config BODENV = BORV20          // Brown Out Voltage (Reserved)
-#pragma config BOREN = PBOR_ON          // PBOR Enable (Enabled)
-#pragma config LPOL = PWMxL_ACT_HI      // Low-side PWM Output Polarity (Active High)
-#pragma config HPOL = PWMxH_ACT_HI      // High-side PWM Output Polarity (Active High)
-#pragma config PWMPIN = RST_IOPIN       // PWM Output Pin Reset (Control with PORT/TRIS regs)
-#pragma config MCLRE = MCLR_EN          // Master Clear Enable (Enabled)
-
-// FGS
-#pragma config GWRP = GWRP_OFF          // General Code Segment Write Protect (Disabled)
-#pragma config GCP = CODE_PROT_OFF      // General Segment Code Protection (Disabled)
-
-// FICD
-#pragma config ICS = ICS_PGD            // Comm Channel Select (Use PGC/EMUC and PGD/EMUD)
-
-// #pragma config statements should precede project file includes.
-// Use project enums instead of #define for ON and OFF.
-
-
-
 #include "xc.h"
 #include "function.h"
 #include "timer.h"
@@ -47,13 +16,60 @@
 #include <stdlib.h>
 
 
+#define WAIT_FOR_START (0)
+#define EXECUTE (1)
+
+// Interrupt routine of the timer 4, use to solving the debouncing problem
+void __attribute__((__interrupt__, __auto_psv__)) _T4Interrupt(){
+    IFS1bits.T4IF = 0;      // clear the flag of the interrupt timer 4
+    IEC1bits.T4IE = 0;      // disable the interrupt of the timer 2
+}
+
+// Interrupt routine associated to the pressed button T2
+void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
+    IEC1bits.INT1IE = 0;        // disable the interrupt of INT1
+    IEC1bits.T4IE = 1;          // enable the interrupt of the TIMER4 
+    tmr_setup_period(TIMER4,20);
+}
+
+void mapInterruptsButton(){
+    // Put the button as input
+    TRISEbits.TRISE8 = 1; 
+    
+    // Assign an interrupt INT1 to the corresponding pin
+    RPINR0bits.INT1R = 88;
+    INTCON2bits.GIE = 1;    // set global interrupt enable
+    IFS1bits.INT1IF = 0;    // clear the interrupt flag
+    IEC1bits.INT1IE = 1;    // enable the interrupt button
+}
+
 
 int main() {
-    
+    initializeIO();
+    //initUART();
+    //initADC();
+    //initPWM();
+    mapInterruptsButton();
+    int state = WAIT_FOR_START;
     
     
     while(1){
-        
+        switch(state){
+            case(WAIT_FOR_START):
+                turnOnLed(1);
+                if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1){
+                    IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
+                    IEC1bits.INT1IE = 1; // Enable the interrupt of INT1 
+                    state = EXECUTE;
+                }
+            case(EXECUTE):
+                if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1){
+                    IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
+                    IEC1bits.INT1IE = 1; // Enable the interrupt of INT1 
+                    state = WAIT_FOR_START;
+                }
+                turnOffLed(1);
+        }
     }
     return 0;
 }

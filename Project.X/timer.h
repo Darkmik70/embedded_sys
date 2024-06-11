@@ -41,39 +41,6 @@
 #define TIMER3 3
 #define TIMER4 4
 
-// TODO Insert declarations
-
-// Comment a function and leverage automatic documentation with slash star star
-/**
-    <p><b>Function prototype:</b></p>
-  
-    <p><b>Summary:</b></p>
-
-    <p><b>Description:</b></p>
-
-    <p><b>Precondition:</b></p>
-
-    <p><b>Parameters:</b></p>
-
-    <p><b>Returns:</b></p>
-
-    <p><b>Example:</b></p>
-    <code>
- 
-    </code>
-
-    <p><b>Remarks:</b></p>
- */
-// TODO Insert declarations or function prototypes (right here) to leverage 
-// live documentation
-
-/**
- * @brief Get the timer's interrupt flag state.
- * 
- * @param timer - timer ID
- * @return int - Interrupt state of the timer 1: TIMER EXPIRED 0: TIMER ONGOING
- */
-int get_timer_status(int timer);
 
 // set the prescaler
 int set_prescaler(int ms);

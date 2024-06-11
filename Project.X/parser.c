@@ -5,9 +5,9 @@
  * Created on 9 giugno 2024, 22.19
  */
 
-
 #include "xc.h"
 #include "parser.h"
+
 
 int parse_byte(parser_state* ps, char byte) {
     switch (ps->state) {

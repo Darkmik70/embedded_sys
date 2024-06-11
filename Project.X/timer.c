@@ -137,24 +137,10 @@
         IFS1bits.T4IF = 0;  // clear Timer4 Interrupt Flag
         
         // Uncomment this line is the interrupt are use
-        IEC1bits.T4IE = 1;  // enable Timer4 Interrupt
+        //IEC1bits.T4IE = 1;  // enable Timer4 Interrupt
         
         T4CONbits.TON = 1;  // start the timer
     }
-}
-
-
-int get_timer_status(int timer) {
-    switch(timer) {
-        case TIMER1:
-            return IFS0bits.T1IF;
-        case TIMER2:
-            return IFS0bits.T2IF;
-        case TIMER3:
-            return IFS0bits.T3IF;
-        case TIMER4:
-            return IFS1bits.T4IF;
-        }
 }
 
 /**

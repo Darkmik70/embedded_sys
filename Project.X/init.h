@@ -48,11 +48,7 @@ void initUART();
 
 void initADC();
 
-float convertTo(int adc_value, char type);
-
-void init_pwm();
-
-void drive(char type, int time);
+void initPWM();
 
 #ifdef	__cplusplus
 extern "C" {
@@ -65,5 +61,5 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
-#endif	/* XC_HEADER_TEMPLATE_H */
+#endif	/* INIT_H */
 
