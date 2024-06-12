@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <executable name="dist/default/production/Project.X.production.elf">
+    <memory name="data">
+      <units>bytes</units>
+      <length>53248</length>
+      <used>28</used>
+      <free>53220</free>
+    </memory>
+    <memory name="program">
+      <units>bytes</units>
+      <length>524544</length>
+      <used>10707</used>
+      <free>513837</free>
+    </memory>
+  </executable>
+</project>
