@@ -7,7 +7,7 @@
 
 
 #include "xc.h"
-#include "function.h"
+#include "led.h"
 #include "init.h"
 #include <math.h>
 
@@ -26,7 +26,7 @@ void initializeIO() {
     TRISGbits.TRISG9 = 0;   // set LD2 as an output pin
     TRISBbits.TRISB8 = 0;   // set LDLEFT as an output pin
     TRISFbits.TRISF1 = 0;   // set LDRIGHT as an output pin
-
+    
     // Set pin as input
     TRISEbits.TRISE8 = 1;   // T2 button set as input
     TRISEbits.TRISE9 = 1;   // T3 button set as input 
@@ -102,52 +102,6 @@ float convertTo(int adc_value, char type) {
     }
     return 0;
 }
-
-void drive(char type, int time){
-    // OC1        
-    OC1CON1 = 0;
-    OC1CON2 = 0;
-    switch(type){
-        case('F'):      // go forward     
-            RPOR2bits.RP68R = 0b010000;   // RD4-PWMD outs OC1
-            RPOR1bits.RP66R = 0b010000;   // RD2-PWMB outs OC1    
-            break;
-        
-        case('L'):      // go counterclockwise
-            RPOR2bits.RP68R = 0b010000;   
-            RPOR0bits.RP65R = 0b010000;    
-            break;
-        
-        case('R'):      // go clockwise
-            RPOR1bits.RP67R = 0b010000;   // 
-            RPOR1bits.RP66R = 0b010000;   // 
-            break;
-        
-        case('B'):      // go backward
-            RPOR1bits.RP67R = 0b010000;   // 
-            RPOR0bits.RP65R = 0b010000;   //
-            break;
-            
-        case('S'):      // stop
-            break;
-
-        default:
-            break;
-        
-        
-    }
-    if(type != 'S'){
-        OC1CON1bits.OCTSEL = 0x07;
-        OC1R = 5200;
-        OC1RS = 7200;
-        OC1CON2bits.SYNCSEL = 0x1F;
-        
-        OC1CON1bits.OCM = 6;     
-    }
-            
-}
-
-
 
 // 5Hz is 100ms on e 100 off
 // 2.5Hz is 200 ms on e 200 off

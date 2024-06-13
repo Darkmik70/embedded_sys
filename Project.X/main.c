@@ -1,5 +1,5 @@
 #include "xc.h"
-#include "function.h"
+#include "led.h"
 #include "timer.h"
 #include "init.h"
 #include "parser.h"
@@ -7,6 +7,8 @@
 //#include <string.h>
 #include <stdio.h>
 //#include <stdlib.h>
+
+#define TASKS_NUM 2
 
 #define WAIT_FOR_START (0)
 #define EXECUTE (1)
@@ -46,9 +48,22 @@ void mapInterruptsButton(){
 /*
  * A0 should blink with 1 Hz no matter the state
  */
-void task_blink_led()
+void task_blink_A0()
 { 
     toggleLed(1);     // A0
+}
+
+/*
+ * Left and right indicators should blink at 1 Hz in 'Wait for start'
+ */
+void task_blink_indicators(void* state)
+{
+    if ( (int)state == WAIT_FOR_START)
+    toggleLed(3);
+    else if ( (int)state == EXECUTE)
+        turnOffLed(3);
+    else
+        turnOnLed(2);
 }
 
 
@@ -60,25 +75,29 @@ int main() {
     mapInterruptsButton();
     int state = WAIT_FOR_START;
     
-    
-    // scheduler configuration
-//    heartbeat schedInfo[MAX_TASKS];
-    
-    
+            
+   
+        
     /*scheduler configuration*/
-    heartbeat schedInfo[1];
+    heartbeat schedInfo[TASKS_NUM];
     
     schedInfo[0].n = 0;
     schedInfo[0].N = 1000; // 1 Hz frequency, triggers every 1000 runs
-    schedInfo[0].f = task_blink_led;
+    schedInfo[0].f = task_blink_A0;
     schedInfo[0].params = NULL;
     schedInfo[0].enable = 1;
     
+    schedInfo[1].n = 0;
+    schedInfo[1].N = 1000; // 1 Hz frequency, triggers every 1000 runs
+    schedInfo[1].f = task_blink_indicators;
+    schedInfo[1].params = (void*)&state; //TODO set pointer to state 
+    schedInfo[1].enable = 1;
+
      
 
     // Control loop frequency is 1 kHz
     tmr_setup_period(TIMER1, 1, 0);
-    while(1){
+    while(1){ 
         
         /* switch state */
         if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
@@ -94,7 +113,7 @@ int main() {
             }
         }
         
-        scheduler(schedInfo, 1);
+        scheduler(schedInfo, TASKS_NUM);
         
         if (tmr_wait_period(TIMER1) == 1)
         {

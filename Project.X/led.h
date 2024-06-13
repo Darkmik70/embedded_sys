@@ -29,8 +29,8 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef FUNCTION_H
-#define	FUNCTION_H
+#ifndef LED_H
+#define	LED_H
 
 #include <xc.h> 
 
