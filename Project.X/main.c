@@ -56,14 +56,15 @@ void task_blink_A0()
 /*
  * Left and right indicators should blink at 1 Hz in 'Wait for start'
  */
-void task_blink_indicators(void* state)
+void task_blink_indicators(void* ptr)
 {
-    if ( (int)state == WAIT_FOR_START)
-    toggleLed(3);
-    else if ( (int)state == EXECUTE)
+    int* state = (int*) ptr;
+    int value = *state;
+    
+    if ( value == WAIT_FOR_START)
+        toggleLed(3);
+    if (value == EXECUTE)
         turnOffLed(3);
-    else
-        turnOnLed(2);
 }
 
 

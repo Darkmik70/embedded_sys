@@ -49,6 +49,10 @@ void turnOnLed(int LED_NUMBER) {
     if (LED_NUMBER == 2) {
         LD2_LED = 1;
     }
+    if (LED_NUMBER == 3) {
+        LD_LEFT = 1;
+        LD_RIGHT = 1;
+    }
 }
 
 /**
@@ -62,6 +66,11 @@ void turnOffLed(int LED_NUMBER) {
     }
     if (LED_NUMBER == 2) {
         LD2_LED = 0;
+    }
+    if (LED_NUMBER == 3)
+    {
+        LD_LEFT = 0;
+        LD_RIGHT = 0;
     }
 }
 
