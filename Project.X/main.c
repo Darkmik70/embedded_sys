@@ -20,8 +20,7 @@ void __attribute__((__interrupt__, __auto_psv__)) _T4Interrupt(){
 // Interrupt routine associated to the pressed button T2
 void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
     IEC1bits.INT1IE = 0;        // disable the interrupt of INT1
-    IEC1bits.T4IE = 1;          // enable the interrupt of the TIMER4 
-    tmr_setup_period(TIMER4,20);
+    tmr_setup_period(TIMER4,20,1);
 }
 
 // UART Interrupt
@@ -53,6 +52,15 @@ int main() {
     mapInterruptsButton();
     int state = WAIT_FOR_START;
     
+    
+    // scheduler configuration
+//    heartbeat schedInfo[MAX_TASKS];
+    
+    /*initialize scheduler*/
+    
+    
+    // Control loop frequency is 1 kHz
+    tmr_setup_period(TIMER1, 1, 0);
     while(1){
         
         /* switch state */
@@ -69,10 +77,19 @@ int main() {
             }
         }
         
+        
+        
+        
         if (state == EXECUTE) {
             turnOnLed(2);
         }
         else turnOffLed(2);
+        
+        
+        if (tmr_wait_period(TIMER1) == 1)
+        {
+            turnOnLed(1);
+        };
     }
     return 0;
 }
