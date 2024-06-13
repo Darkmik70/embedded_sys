@@ -4,9 +4,9 @@
 #include "init.h"
 #include "parser.h"
 #include "scheduler.h"
-#include <string.h>
+//#include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 
 #define WAIT_FOR_START (0)
 #define EXECUTE (1)
@@ -43,6 +43,14 @@ void mapInterruptsButton(){
     IEC1bits.INT1IE = 1;    // enable the interrupt button
 }
 
+/*
+ * A0 should blink with 1 Hz no matter the state
+ */
+void task_blink_led()
+{ 
+    toggleLed(1);     // A0
+}
+
 
 int main() {
     initializeIO();
@@ -56,9 +64,18 @@ int main() {
     // scheduler configuration
 //    heartbeat schedInfo[MAX_TASKS];
     
-    /*initialize scheduler*/
     
+    /*scheduler configuration*/
+    heartbeat schedInfo[1];
     
+    schedInfo[0].n = 0;
+    schedInfo[0].N = 1000; // 1 Hz frequency, triggers every 1000 runs
+    schedInfo[0].f = task_blink_led;
+    schedInfo[0].params = NULL;
+    schedInfo[0].enable = 1;
+    
+     
+
     // Control loop frequency is 1 kHz
     tmr_setup_period(TIMER1, 1, 0);
     while(1){
@@ -77,19 +94,14 @@ int main() {
             }
         }
         
-        
-        
-        
-        if (state == EXECUTE) {
-            turnOnLed(2);
-        }
-        else turnOffLed(2);
-        
+        scheduler(schedInfo, 1);
         
         if (tmr_wait_period(TIMER1) == 1)
         {
-            turnOnLed(1);
+            turnOnLed(2);
         };
     }
     return 0;
 }
+
+
