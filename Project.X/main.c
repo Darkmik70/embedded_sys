@@ -1,10 +1,3 @@
-/*
- * File:   main.c
- * Author: RomiC
- *
- * Created on 9 giugno 2024, 22.19
- */
-
 #include "xc.h"
 #include "function.h"
 #include "timer.h"
@@ -14,7 +7,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 
 #define WAIT_FOR_START (0)
 #define EXECUTE (1)
@@ -53,12 +45,6 @@ void mapInterruptsButton(){
 }
 
 
-void enable_int1() {
-    IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
-    IEC1bits.INT1IE = 1; // Enable the interrupt of INT1 
-}
-
-
 int main() {
     initializeIO();
     //initUART();
@@ -69,19 +55,18 @@ int main() {
     
     while(1){
         
-        switch(state){
-            case(WAIT_FOR_START):
-                turnOnLed(1);
-                if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1){
-                    enable_int1();
+        /* switch state */
+        if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
+            IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
+            IEC1bits.INT1IE = 1; // Enable the interrupt of INT1 
+            switch(state){
+                case(WAIT_FOR_START):
                     state = EXECUTE;
-                }
-            case(EXECUTE):
-                turnOffLed(1);
-                if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1){
-                    enable_int1();
+                    break;
+                case(EXECUTE):
                     state = WAIT_FOR_START;
-                }
+                    break;
+            }
         }
         
         if (state == EXECUTE) {
