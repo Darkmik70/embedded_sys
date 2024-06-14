@@ -116,7 +116,7 @@ void task_uart_send() {
 
 void task_get_battery_voltage() {
     int adc_battery = ADC1BUF0;
-    float v_batt = get_battery_voltage(adc_battery);
+    double v_batt = convertTo(adc_battery, 'V');
 //    char str[16] = "$MBATT,";
 //    char float_str[10];
     char str[16];
@@ -129,10 +129,10 @@ void task_get_battery_voltage() {
 }
 
 void task_get_distance() {
-    AD1CON1bits.DONE = 0;
-    while(!AD1CON1bits.DONE){}
+    //AD1CON1bits.DONE = 0;
+    //while(!AD1CON1bits.DONE){}
     int adc_distance = ADC1BUF1;
-    float dist = get_ir_distance(adc_distance);
+    float dist = convertTo(adc_distance, 'M');
 //    char str[16] = "$MBATT,";
 //    char float_str[10];
     char str[16];
@@ -159,7 +159,6 @@ int main() {
     init_circular_buffer(&buff_send);
     
     LATBbits.LATB9 = 1;     // Enable IR Sensor
-   
         
     /*scheduler configuration*/
     heartbeat schedInfo[TASKS_NUM];
