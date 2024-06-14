@@ -86,6 +86,3 @@ int next_value(const char* msg, int i) {
 		i++;
 	return i;
 }
-
-void init_parser(){
-}

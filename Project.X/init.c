@@ -9,6 +9,7 @@
 #include "timer.h"
 #include "init.h"
 #include "led.h"
+#include "parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +18,7 @@
  * This function assign the UART into the pin where we read and send, it is
  * also define the baud rate register
  */
-void initUART() {
+void init_UART() {
     // assign an interrupt to the corresponding pin bits
     TRISDbits.TRISD11 = 1;      // set RD11 as input
     RPOR0bits.RP64R = 1; // remap RD0 to RP64
@@ -43,7 +44,7 @@ void initUART() {
     U1STAbits.URXISEL = 0; // Flag goes to zero when a char is received
 }
 
-void initADC(){
+void init_ADC(){
     // Remap the pins
     ANSELBbits.ANSB11 = 1;  // battery pin analog
     ANSELBbits.ANSB14 = 1;  // Proximity sensor pin analog
@@ -69,12 +70,17 @@ void initADC(){
  * Remap Programmable pins motor control, set the motor as output to give them 
  * power
  */
-void initPWM(){
+void init_PWM(){
     // Set all PWN pin as output
     TRISDbits.TRISD1 = 0;   // RD1 
     TRISDbits.TRISD2 = 0;
     TRISDbits.TRISD3 = 0;
     TRISDbits.TRISD4 = 0;
-    
 }
 
+void init_PARSER(){
+    parser_state pstate;
+	pstate.state = STATE_DOLLAR;
+	pstate.index_type = 0; 
+	pstate.index_payload = 0;
+}

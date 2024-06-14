@@ -10,7 +10,7 @@
 #include <stdio.h>
 //#include <stdlib.h>
 
-#define TASKS_NUM 3
+#define TASKS_NUM 5
 
 #define WAIT_FOR_START (0)
 #define EXECUTE (1)
@@ -120,7 +120,23 @@ void task_get_battery_voltage() {
 //    char str[16] = "$MBATT,";
 //    char float_str[10];
     char str[16];
-    sprintf(str, "$MBATT,%f*",v_batt);
+    sprintf(str, "$MBATT,%.2f*",v_batt);
+//    strcat(str,float_str);
+    
+    for(int i = 0; str[i] != '\0' ; i++) {
+        write_circular_buffer(&buff_send, str[i]);
+    }   
+}
+
+void task_get_distance() {
+    AD1CON1bits.DONE = 0;
+    while(!AD1CON1bits.DONE){}
+    int adc_distance = ADC1BUF1;
+    float dist = get_ir_distance(adc_distance);
+//    char str[16] = "$MBATT,";
+//    char float_str[10];
+    char str[16];
+    sprintf(str, "$MDIST,%d*",(int)dist);
 //    strcat(str,float_str);
     
     for(int i = 0; str[i] != '\0' ; i++) {
@@ -131,17 +147,18 @@ void task_get_battery_voltage() {
 
 
 int main() {
-    initializeIO();
-    initUART();
-    initADC();
-    //initPWM();
+    init_IO();
+    init_UART();
+    init_ADC();
+    init_PARSER();
+    //init_PWM();
     mapInterruptsButton();
     int state = WAIT_FOR_START;
     
     init_circular_buffer(&buff_receive);
     init_circular_buffer(&buff_send);
     
-            
+    LATBbits.LATB9 = 1;     // Enable IR Sensor
    
         
     /*scheduler configuration*/
@@ -164,7 +181,18 @@ int main() {
     schedInfo[2].f = task_uart_send;
     schedInfo[2].params = NULL; 
     schedInfo[2].enable = 1;
-
+    
+    schedInfo[3].n = 0;
+    schedInfo[3].N = 1000; // 1 Hz frequency, triggers every 1000 runs
+    schedInfo[3].f = task_get_battery_voltage;
+    schedInfo[3].params = NULL; 
+    schedInfo[3].enable = 1;
+    
+    schedInfo[4].n = 0;
+    schedInfo[4].N = 100; // 1 Hz frequency, triggers every 1000 runs
+    schedInfo[4].f = task_get_distance;
+    schedInfo[4].params = NULL; 
+    schedInfo[4].enable = 1;
      
 
     // Control loop frequency is 1 kHz
@@ -189,7 +217,7 @@ int main() {
         
         if (tmr_wait_period(TIMER1) == 1)
         {
-            turnOnLed(2);
+            toggleLed(2);
         };
     }
     return 0;
