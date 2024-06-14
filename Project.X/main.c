@@ -4,14 +4,17 @@
 #include "init.h"
 #include "parser.h"
 #include "scheduler.h"
+#include "circular_buffer.h"
 //#include <string.h>
 #include <stdio.h>
 //#include <stdlib.h>
 
-#define TASKS_NUM 2
+#define TASKS_NUM 3
 
 #define WAIT_FOR_START (0)
 #define EXECUTE (1)
+
+CircularBuffer buffer_uart;
 
 // Interrupt routine of the timer 4, use to solving the debouncing problem
 void __attribute__((__interrupt__, __auto_psv__)) _T4Interrupt(){
@@ -25,12 +28,26 @@ void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
     tmr_setup_period(TIMER4,20,1);
 }
 
-// UART Interrupt
+// U1RX Interrupt
 void __attribute__ (( __interrupt__ , __auto_psv__ )) _U1RXInterrupt() {
-    char data;
-    data = U1RXREG;         // Read from RX register
-    U1TXREG = data;         // Send to TX register
-    
+    while (U1STAbits.URXDA) {
+        char data;
+        data = U1RXREG;         // Read from RX register
+        if (write_circular_buffer(&buffer_uart, data)){
+            // Some action when buffer is not full and is full
+        }
+        else 
+        {
+            U1TXREG = '0';
+        }
+//        if (read_circular_buffer(&buffer_uart, &send))
+//        {
+//            U1TXREG = send;         // Send to TX register
+//        }
+//        else  U1TXREG = 'b';
+                
+        
+    }
     IFS0bits.U1RXIF = 0;    // Reset interrupt flag
 }
 
@@ -67,14 +84,24 @@ void task_blink_indicators(void* ptr)
         turnOffLed(3);
 }
 
+void task_parse_byte() {
+    char send;
+    if (read_circular_buffer(&buffer_uart, &send)) {
+        U1TXREG = send; // Send to TX register
+    }
+    
+}
+
 
 int main() {
     initializeIO();
-    //initUART();
+    initUART();
     //initADC();
     //initPWM();
     mapInterruptsButton();
     int state = WAIT_FOR_START;
+    
+    init_circular_buffer(&buffer_uart);
     
             
    
@@ -93,6 +120,12 @@ int main() {
     schedInfo[1].f = task_blink_indicators;
     schedInfo[1].params = (void*)&state; //TODO set pointer to state 
     schedInfo[1].enable = 1;
+    
+    schedInfo[2].n = 0;
+    schedInfo[2].N = 1; // 1 Hz frequency, triggers every 1000 runs
+    schedInfo[2].f = task_parse_byte;
+    schedInfo[2].params = NULL; 
+    schedInfo[2].enable = 1;
 
      
 
