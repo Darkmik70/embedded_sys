@@ -6,9 +6,12 @@
                    projectFiles="true">
       <itemPath>init.h</itemPath>
       <itemPath>timer.h</itemPath>
-      <itemPath>function.h</itemPath>
       <itemPath>parser.h</itemPath>
       <itemPath>scheduler.h</itemPath>
+      <itemPath>pwm.h</itemPath>
+      <itemPath>led.h</itemPath>
+      <itemPath>adc.h</itemPath>
+      <itemPath>circular_buffer.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -22,14 +25,20 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>function.c</itemPath>
       <itemPath>init.c</itemPath>
       <itemPath>timer.c</itemPath>
       <itemPath>scheduler.c</itemPath>
       <itemPath>parser.c</itemPath>
       <itemPath>main.c</itemPath>
+      <itemPath>pwm.c</itemPath>
+      <itemPath>adc.c</itemPath>
+      <itemPath>led.c</itemPath>
+      <itemPath>circular_buffer.c</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">

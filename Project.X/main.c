@@ -1,6 +1,7 @@
 #include "xc.h"
 #include "led.h"
 #include "timer.h"
+#include "adc.h"
 #include "init.h"
 #include "parser.h"
 #include "scheduler.h"
@@ -14,7 +15,8 @@
 #define WAIT_FOR_START (0)
 #define EXECUTE (1)
 
-CircularBuffer buffer_uart;
+CircularBuffer buff_receive;
+CircularBuffer buff_send;
 
 // Interrupt routine of the timer 4, use to solving the debouncing problem
 void __attribute__((__interrupt__, __auto_psv__)) _T4Interrupt(){
@@ -33,7 +35,7 @@ void __attribute__ (( __interrupt__ , __auto_psv__ )) _U1RXInterrupt() {
     while (U1STAbits.URXDA) {
         char data;
         data = U1RXREG;         // Read from RX register
-        if (write_circular_buffer(&buffer_uart, data)){
+        if (write_circular_buffer(&buff_receive, data)){
             // Some action when buffer is not full and is full
         }
         else 
@@ -49,6 +51,27 @@ void __attribute__ (( __interrupt__ , __auto_psv__ )) _U1RXInterrupt() {
         
     }
     IFS0bits.U1RXIF = 0;    // Reset interrupt flag
+}
+
+void __attribute__((__interrupt__, __auto_psv__)) _U1TXInterrupt()
+{
+    IFS0bits.U1TXIF = 0; // clear the interrupt flag
+    // if the end of the message is reached
+    char send;
+    if (read_circular_buffer(&buff_send, &send)) {
+        U1TXREG = send; // Send to TX register
+    }
+//    if (uart_msg[itr] == '\0')
+//    {
+//        itr = 0;                               // reset the iterator
+//        memset(uart_msg, 0, sizeof(uart_msg)); // clear the message
+//        is_msg_ready = 0;                      // reset the flag's message
+//    }
+//    else
+//    {
+//        U1TXREG = uart_msg[itr]; // send one character
+//        itr++;                   // increment the iterator
+//    }
 }
 
 void mapInterruptsButton(){
@@ -84,24 +107,39 @@ void task_blink_indicators(void* ptr)
         turnOffLed(3);
 }
 
-void task_parse_byte() {
+void task_uart_send() {
     char send;
-    if (read_circular_buffer(&buffer_uart, &send)) {
+    if (read_circular_buffer(&buff_send, &send)) {
         U1TXREG = send; // Send to TX register
     }
-    
 }
+
+void task_get_battery_voltage() {
+    int adc_battery = ADC1BUF0;
+    float v_batt = get_battery_voltage(adc_battery);
+//    char str[16] = "$MBATT,";
+//    char float_str[10];
+    char str[16];
+    sprintf(str, "$MBATT,%f*",v_batt);
+//    strcat(str,float_str);
+    
+    for(int i = 0; str[i] != '\0' ; i++) {
+        write_circular_buffer(&buff_send, str[i]);
+    }   
+}
+    
 
 
 int main() {
     initializeIO();
     initUART();
-    //initADC();
+    initADC();
     //initPWM();
     mapInterruptsButton();
     int state = WAIT_FOR_START;
     
-    init_circular_buffer(&buffer_uart);
+    init_circular_buffer(&buff_receive);
+    init_circular_buffer(&buff_send);
     
             
    
@@ -123,7 +161,7 @@ int main() {
     
     schedInfo[2].n = 0;
     schedInfo[2].N = 1; // 1 Hz frequency, triggers every 1000 runs
-    schedInfo[2].f = task_parse_byte;
+    schedInfo[2].f = task_uart_send;
     schedInfo[2].params = NULL; 
     schedInfo[2].enable = 1;
 

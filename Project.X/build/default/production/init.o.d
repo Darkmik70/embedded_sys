@@ -1,7 +1,7 @@
-build/default/production/init.o: init.c timer.h init.h function.h
+build/default/production/init.o: init.c timer.h init.h led.h
 
 timer.h:
 
 init.h:
 
-function.h:
+led.h:

@@ -1,11 +1,3 @@
-/*
- * File:   function.c
- * Author: RomiC
- *
- * Created on March 23, 2024, 12:53 PM
- */
-
-
 #include "xc.h"
 #include "led.h"
 #include "init.h"
@@ -92,25 +84,6 @@ void toggleLed(int LED_NUMBER) {
     }
 }
 
-/**
- * Function that convert the corrente? into the voltage or ... 
- * @param adc_value: value of the corrente?
- * @param type: what we want to compute, it could be voltage or temperature etc.
- * @return voltage or distance
- */
-float convertTo(int adc_value, char type) {
-    float value = ((float)adc_value / ADC_RESOLUTION) * VDD; // Convert ADC value to voltage
-    
-    switch(type){
-        case'V':
-            return value*3;     // Voltage divider
-        case'M':
-            return 2.34 - 4.74*value + 4.06*pow(value,2) -1.60*pow(value,3) + 0.24*pow(value,4);
-        default:
-            break;
-    }
-    return 0;
-}
 
 // 5Hz is 100ms on e 100 off
 // 2.5Hz is 200 ms on e 200 off
