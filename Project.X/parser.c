@@ -7,6 +7,7 @@
 
 #include "xc.h"
 #include "parser.h"
+#include "led.h"
 
 
 int parse_byte(parser_state* ps, char byte) {
@@ -16,6 +17,7 @@ int parse_byte(parser_state* ps, char byte) {
                 // Transition to STATE_TYPE when '$' is received
                 ps->state = STATE_TYPE;
                 ps->index_type = 0; // Reset index for the message type
+                turnOnLed(1);
             }
             break;
             
