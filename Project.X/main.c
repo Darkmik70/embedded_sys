@@ -128,7 +128,7 @@ void task_get_battery_voltage() {
     //    strcat(str,float_str);
 
     for (int i = 0; str[i] != '\0'; i++) {
-        //addToBuffer(&uartBufferTx, str[i]);
+        write_circular_buffer(&buffer_Tx, str[i]);
     }
 }
 
@@ -141,6 +141,9 @@ void task_get_distance() {
     sprintf(str, "$MDIST,%d*", (int) dist);
     //    strcat(str,float_str);
 
+    for (int i = 0; str[i] != '\0'; i++) {
+        write_circular_buffer(&buffer_Tx, str[i]);
+    }
 }
 
 // finally in the command control for pwm we could implement something like:
@@ -318,19 +321,19 @@ int main() {
     schedInfo[2].N = 1000;
     schedInfo[2].f = task_uart_send;
     schedInfo[2].params = NULL;
-    schedInfo[2].enable = 0;
+    schedInfo[2].enable = 1;
     
     schedInfo[3].n = 0;
     schedInfo[3].N = 1000; // 1 Hz frequency, triggers every 1000 runs
     schedInfo[3].f = task_get_battery_voltage;
     schedInfo[3].params = NULL;
-    schedInfo[3].enable = 0;
+    schedInfo[3].enable = 1;
 
     schedInfo[4].n = 0;
     schedInfo[4].N = 100; // 1 Hz frequency, triggers every 1000 runs
     schedInfo[4].f = task_get_distance;
     schedInfo[4].params = NULL;
-    schedInfo[4].enable = 0;
+    schedInfo[4].enable = 1;
     
     schedInfo[5].n = 0;
     schedInfo[5].N = 1; // 1 Hz frequency, triggers every 1000 runs
@@ -355,7 +358,7 @@ int main() {
         /* switch state */
         switch (state) {
             case(WAIT_FOR_START):
-                drive(1);
+                //drive(1);
                 if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
                     IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
                     IEC1bits.INT1IE = 1; // Enable the interrupt of INT1
@@ -363,7 +366,7 @@ int main() {
                 }
                 break;
             case(EXECUTE):
-                drive(4);
+                //drive(2);
                 toggleLed(2);
                 if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
                     IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1

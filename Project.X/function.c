@@ -109,6 +109,7 @@ void drive(int type){
     // OC1        
     OC1CON1 = 0;
     OC1CON2 = 0;
+    
     switch(type){
         case(1):      // go forward     
             RPOR2bits.RP68R = 0b010000;   // RD4-PWMD outs OC1
@@ -142,7 +143,7 @@ void drive(int type){
         OC1R = 5200;
         OC1RS = 7200;
         OC1CON2bits.SYNCSEL = 0x1F;
-        OC1CON1bits.OCM = 6;
+        OC1CON1bits.OCM = 6;     
     }         
 }
 
