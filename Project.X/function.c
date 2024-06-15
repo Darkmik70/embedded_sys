@@ -17,7 +17,7 @@
  * @param None
  * @return None
  */
-void initializeIO() {
+void initIO() {
     // all analog pins disabled
     ANSELA = ANSELB = ANSELC = ANSELD = ANSELE = ANSELG = 0x0000;
     

@@ -44,7 +44,7 @@
 #define T2_BUTTON PORTEbits.RE8
 #define T3_BUTTON PORTEbits.RE9
 
-void initializeIO();
+void initIO();
 
 void turnOffLed(int LED_NUMBER);
 

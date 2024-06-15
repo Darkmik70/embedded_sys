@@ -6,11 +6,17 @@
 CircularBuffer uartBufferRx;
 CircularBuffer uartBufferTx;
 
-void initCircularBuffer(CircularBuffer *uartBuffer) {
+void initBuffer(CircularBuffer *uartBuffer) {
     uartBuffer->head = 0;
     uartBuffer->tail = 0;
     uartBuffer->count = 0;
 }
+
+
+int is_circular_buffer
+
+
+
 
 void addToBuffer(CircularBuffer *uartBuffer, char data) {
     if (uartBuffer->count < BUFFER_SIZE) {

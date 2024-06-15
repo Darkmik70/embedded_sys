@@ -9,10 +9,16 @@ typedef struct {
     char data[BUFFER_SIZE];
     int head; // Index read
     int tail; // Index write
-    int count; // Number of characters writen
+    int count; // Number of characters written
 } CircularBuffer;
 
-void initCircularBuffer(CircularBuffer *uartBuffer);
+void initBuffer(CircularBuffer *uartBuffer);
+
+int is_circular_buffer_full(CircularBuffer *cb);
+
+int is_circular_buffer_empty(CircularBuffer *cb);
+
+
 void addToBuffer(CircularBuffer *uartBuffer, char data);
 int readBuffer(char buffer[], int length);
 int readByte();

@@ -92,8 +92,6 @@ void task_uart_send(){
 void task_get_battery_voltage() {
     int adc_battery = ADC1BUF0;
     double v_batt = convertTo(adc_battery, 'V');
-    //    char str[16] = "$MBATT,";
-    //    char float_str[10];
     char str[16];
     sprintf(str, "$MBATT,%.2f*", v_batt);
     //    strcat(str,float_str);
@@ -108,8 +106,6 @@ void task_get_distance() {
     //while(!AD1CON1bits.DONE){}
     int adc_distance = ADC1BUF1;
     float dist = convertTo(adc_distance, 'M');
-    //    char str[16] = "$MBATT,";
-    //    char float_str[10];
     char str[16];
     sprintf(str, "$MDIST,%d*", (int) dist);
     //    strcat(str,float_str);
@@ -121,7 +117,7 @@ void task_get_distance() {
 
 
 int main() {
-    initializeIO();
+    initIO();
     initUART();
     initADC();
     initPWM();
