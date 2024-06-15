@@ -40,8 +40,8 @@ CurrentCommand current_command;
 
 parser_state pstate;
 
-CircularBuffer buffer_Rx;
-CircularBuffer buffer_Tx;
+CircularBuffer buffer_RX;
+CircularBuffer buffer_TX;
 CommandList cmd_fifo;
 
 cmd buff_cmd;
@@ -66,11 +66,9 @@ void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
 
 // UART Interrupt
 void __attribute__ (( __interrupt__ , __auto_psv__ )) _U1RXInterrupt() {
-    char data_Rx;
-    data_Rx = U1RXREG;         // Read from RX register
-    if(write_circular_buffer(&buffer_Rx, data_Rx) == 0){
-    //toggleLed(1);
-    }
+    char data_RX;
+    data_RX = U1RXREG;         // Read from RX register
+    if(write_circular_buffer(&buffer_RX, data_RX) == 0){}
     else{
         U1TXREG = '0';
     }
@@ -81,7 +79,7 @@ void __attribute__((__interrupt__, __auto_psv__)) _U1TXInterrupt() {
     IFS0bits.U1TXIF = 0; // clear the interrupt flag
     // if the end of the message is reached
     char send;
-    if (read_circular_buffer(&buffer_Tx, &send) == 0) {
+    if (read_circular_buffer(&buffer_TX, &send) == 0) {
         U1TXREG = send; // Send to TX register
     }
 }
@@ -114,7 +112,7 @@ void task_blink_indicators(){
 
 void task_uart_send() {
     char send;
-    if (read_circular_buffer(&buffer_Tx, &send) == 0) {
+    if (read_circular_buffer(&buffer_TX, &send) == 0) {
         U1TXREG = send; // Send to TX register
     }
 }
@@ -128,7 +126,7 @@ void task_get_battery_voltage() {
     //    strcat(str,float_str);
 
     for (int i = 0; str[i] != '\0'; i++) {
-        write_circular_buffer(&buffer_Tx, str[i]);
+        write_circular_buffer(&buffer_TX, str[i]);
     }
 }
 
@@ -142,19 +140,10 @@ void task_get_distance() {
     //    strcat(str,float_str);
 
     for (int i = 0; str[i] != '\0'; i++) {
-        write_circular_buffer(&buffer_Tx, str[i]);
+        write_circular_buffer(&buffer_TX, str[i]);
     }
 }
 
-// finally in the command control for pwm we could implement something like:
-// (1) if no current command then take one 
-//if (wait for start):
-//	do nothing
-//if(execute)
-//	if (m_dist <= 20 cm):
-//           (if cmd is in its execution, count time) else do nothing
-//        else
-//		just simply execute function adn count time.
 
 void task_pwm_control() {
     if (state == EXECUTE) {
@@ -169,7 +158,11 @@ void task_pwm_control() {
             current_command.time = current_command.time - 1;
         }
         //U1TXREG = current_command.time + '0';
-        U1TXREG = current_command.type + '0';
+        //U1TXREG = current_command.type + '0';
+        
+    // bisogna mettere un else if per lo stato WAIT_FOR_START e poi bisogna 
+    // mettere i motori a zero, poi anche in questo caso il tempo deve passare
+    // quindi bisogna implementare qualcosa
     }
 }
 
@@ -253,7 +246,7 @@ int parsing_process() {
     int result;
     
     // Read a byte from the buffer
-    if (read_circular_buffer(&buffer_Rx, &data) == 0) {
+    if (read_circular_buffer(&buffer_RX, &data) == 0) {
         // Parse the byte
         result = parse_byte(&pstate, data);
 
@@ -297,8 +290,8 @@ int main() {
     mapInterruptsButton();
     
     init_parser(&pstate);
-    initBuffer(&buffer_Rx);
-    initBuffer(&buffer_Tx);
+    initBuffer(&buffer_RX);
+    initBuffer(&buffer_TX);
     init_cmd_list(&cmd_fifo);
     init_command(&current_command);
 
@@ -350,15 +343,15 @@ int main() {
     char data_Rx;
     enable_interrupt1();
     while(1){
-        
-        //parsing_process(); 
-        if(parsing_process() == 0){
-        }    
+ 
+        if(parsing_process() == 0){}    
         
         /* switch state */
         switch (state) {
             case(WAIT_FOR_START):
-                //drive(1);
+                schedInfo[1].enable = 1;        // in wait for start we have the blinking
+                schedInfo[5].enable = 0;        // should wait to the execute to move
+                drive(0);
                 if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
                     IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
                     IEC1bits.INT1IE = 1; // Enable the interrupt of INT1
@@ -366,14 +359,15 @@ int main() {
                 }
                 break;
             case(EXECUTE):
-                //drive(2);
-                toggleLed(2);
+                schedInfo[1].enable = 0;        // in execute this led should not blink
+                turnOffLed(3);
+                schedInfo[5].enable = 1;        // should start moving 
+                
                 if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
                     IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
                     IEC1bits.INT1IE = 1; // Enable the interrupt of INT1
                     state = WAIT_FOR_START;
                 }
-                //state = WAIT_FOR_START;
                 break;
  
         }

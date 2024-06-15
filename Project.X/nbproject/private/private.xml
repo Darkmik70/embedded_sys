@@ -3,9 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/main.c</file>
+            <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/function.h</file>
             <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/parser.c</file>
+            <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/buffer.c</file>
+            <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/main.c</file>
+            <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/buffer.h</file>
             <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/init.c</file>
+            <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/command_list.h</file>
+            <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/function.c</file>
+            <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/command_list.c</file>
         </group>
     </open-files>
 </project-private>
