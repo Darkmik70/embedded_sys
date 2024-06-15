@@ -7,7 +7,7 @@ enum msg_type{
     Forward = 1,
     CounterClockwise = 2,
     Clockwise = 3,
-    Backward = 4}
+    Backward = 4};
 
 typedef struct {
     int type[CMD_LIST_SIZE];
@@ -56,7 +56,7 @@ int enqueue_cmd_list(CommandList *cmd_list, int cmd_type, int cmd_time);
  * @param cmd_time (int) time duration of command
  * @return int 1 if success, 0 if fifo is empty
  */
-int dequeue_cmd_list(CommandList *cmd_list, int &cmd_type, int &cmd_time);
+int dequeue_cmd_list(CommandList *cmd_list, int *cmd_type, int *cmd_time);
 
 
 #endif /* COMMAND_LIST_H */

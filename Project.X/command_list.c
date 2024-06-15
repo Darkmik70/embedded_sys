@@ -8,7 +8,7 @@
  */
 void init_cmd_list(CommandList *cmd_list) {
 
-    for (int = 0; i < CMD_LIST_SIZE; i++) {
+    for (int i = 0; i < CMD_LIST_SIZE; i++) {
         cmd_list->type[i] = 0;
         cmd_list->time[i] = 0;
     }
