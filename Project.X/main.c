@@ -25,12 +25,15 @@
 
 parser_state pstate;
 
+CircularBuffer buffer_Rx;
+CircularBuffer buffer_Tx;
+
+cmd buff_cmd;
 
 //extern CircularBuffer uartBufferRx;
 //extern CircularBuffer uartBufferTx;
 
 int state;
-char data;
 
 // Interrupt routine of the timer 4, use to solving the debouncing problem
 void __attribute__((__interrupt__, __auto_psv__)) _T4Interrupt(){
@@ -48,13 +51,16 @@ void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
 
 // UART Interrupt
 void __attribute__ (( __interrupt__ , __auto_psv__ )) _U1RXInterrupt() {
-    char data;
-    data = U1RXREG;         // Read from RX register
-    U1TXREG = data;         // Send to TX register
+    char data_Rx;
+    data_Rx = U1RXREG;         // Read from RX register
+    if(write_circular_buffer(&buffer_Rx, data_Rx) == 0){} 
+    else{
+        U1TXREG = '0';
+    }
     
-    parse_byte(&pstate, (char)data);
+    //parse_byte(&pstate, (char)data_Rx);
     
-    
+    //U1TXREG = data_Rx;
     IFS0bits.U1RXIF = 0;    // Reset interrupt flag
 }
 
@@ -115,6 +121,38 @@ void task_get_distance() {
     }
 }
 
+int parsing_process() {
+    char data;
+    int result;
+
+    // Read a byte from the buffer
+    if (read_circular_buffer(&buffer_Rx, &data)) {
+        // Parse the byte
+        result = parse_byte(&pstate, data);
+
+        // Check if a new message has been received
+        if (result == NEW_MESSAGE) {
+            // Handle the new message
+            // For example, if the message type is 'PCCMD', turn on LED 1
+            if (strcmp(pstate.msg_type, "PCCMD") == 0) {
+                turnOnLed(1);
+                // Extract the first number
+                int number1 = extract_integer(pstate.msg_payload);
+
+                // Find the start of the next number
+                int next_index = next_value(pstate.msg_payload, 0);
+
+                // Extract the second number
+                int number2 = extract_integer(pstate.msg_payload + next_index);
+
+                buff_cmd.type = number1;
+                buff_cmd.time = number2;
+                return 1;
+            }
+        }
+    }
+}
+
 
 int main() {
     initIO();
@@ -123,9 +161,6 @@ int main() {
     initPWM();
     
     LATBbits.LATB9 = 1;
-    
-    //initCircularBuffer(&uartBufferRx);
-    //initCircularBuffer(&uartBufferTx);
     
     mapInterruptsButton();
     
@@ -162,17 +197,25 @@ int main() {
     schedInfo[4].enable = 0;
     
     state = WAIT_FOR_START;
-    //parser_state pstate;
     
     init_parser(&pstate);
+    initBuffer(&buffer_Rx);
+    initBuffer(&buffer_Tx);
     
     tmr_setup_period(TIMER1,1);
+    
+    char data_Rx;
+    
     while(1){
         
-//        int c = readByte();
-//        if (c !=-1){
-//            int ret = parse_byte(&pstate, (char)c);
-//        }
+        //parsing_process(); 
+        if(parsing_process() == 1){
+            U1TXREG = buff_cmd.type;
+            U1TXREG = buff_cmd.time;
+        }
+        //read_circular_buffer(&buffer_Rx, &data_Rx);
+        //parse_byte(&pstate, data_Rx);
+        
         
         if(T2_BUTTON == 1 && IFS1bits.INT1IF == 1){
             enable_interrupt1();

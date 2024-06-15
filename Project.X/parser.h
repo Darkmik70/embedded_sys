@@ -43,6 +43,11 @@ typedef struct {
 	int index_payload;
 } parser_state;
 
+typedef struct { 
+	int type;
+	int time;
+} cmd;
+
 /*
 Requires a pointer to a parser state, and the byte to process.
 returns NEW_MESSAGE if a message has been successfully parsed.
