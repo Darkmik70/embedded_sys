@@ -54,7 +54,7 @@ void toggleLed(int LED_NUMBER);
 
 float convertTo(int adc_value, char type);
 
-void drive(char type, int time);
+void drive(int type);
 
 #ifdef	__cplusplus
 extern "C" {

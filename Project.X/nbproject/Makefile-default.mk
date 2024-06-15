@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=function.c init.c timer.c scheduler.c parser.c main.c buffer.c
+SOURCEFILES_QUOTED_IF_SPACED=function.c init.c timer.c scheduler.c parser.c main.c buffer.c command_list.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/function.o ${OBJECTDIR}/init.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/scheduler.o ${OBJECTDIR}/parser.o ${OBJECTDIR}/main.o ${OBJECTDIR}/buffer.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/function.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/timer.o.d ${OBJECTDIR}/scheduler.o.d ${OBJECTDIR}/parser.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/buffer.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/function.o ${OBJECTDIR}/init.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/scheduler.o ${OBJECTDIR}/parser.o ${OBJECTDIR}/main.o ${OBJECTDIR}/buffer.o ${OBJECTDIR}/command_list.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/function.o.d ${OBJECTDIR}/init.o.d ${OBJECTDIR}/timer.o.d ${OBJECTDIR}/scheduler.o.d ${OBJECTDIR}/parser.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/buffer.o.d ${OBJECTDIR}/command_list.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/function.o ${OBJECTDIR}/init.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/scheduler.o ${OBJECTDIR}/parser.o ${OBJECTDIR}/main.o ${OBJECTDIR}/buffer.o
+OBJECTFILES=${OBJECTDIR}/function.o ${OBJECTDIR}/init.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/scheduler.o ${OBJECTDIR}/parser.o ${OBJECTDIR}/main.o ${OBJECTDIR}/buffer.o ${OBJECTDIR}/command_list.o
 
 # Source Files
-SOURCEFILES=function.c init.c timer.c scheduler.c parser.c main.c buffer.c
+SOURCEFILES=function.c init.c timer.c scheduler.c parser.c main.c buffer.c command_list.c
 
 
 
@@ -131,6 +131,12 @@ ${OBJECTDIR}/buffer.o: buffer.c  .generated_files/flags/default/22c863c7cf95f0e0
 	@${RM} ${OBJECTDIR}/buffer.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  buffer.c  -o ${OBJECTDIR}/buffer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/buffer.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+${OBJECTDIR}/command_list.o: command_list.c  .generated_files/flags/default/3eb93456f9d3462397a250f92ec200f39cf0c4a1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/command_list.o.d 
+	@${RM} ${OBJECTDIR}/command_list.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  command_list.c  -o ${OBJECTDIR}/command_list.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/command_list.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
 else
 ${OBJECTDIR}/function.o: function.c  .generated_files/flags/default/e1babe32f0575e0064b764ce1ae0a2399b384d5a .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
@@ -173,6 +179,12 @@ ${OBJECTDIR}/buffer.o: buffer.c  .generated_files/flags/default/4eb5e882fc4a7fec
 	@${RM} ${OBJECTDIR}/buffer.o.d 
 	@${RM} ${OBJECTDIR}/buffer.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  buffer.c  -o ${OBJECTDIR}/buffer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/buffer.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
+${OBJECTDIR}/command_list.o: command_list.c  .generated_files/flags/default/792f66ff5db8de87764d445a4f8808d8c32fc3fc .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/command_list.o.d 
+	@${RM} ${OBJECTDIR}/command_list.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  command_list.c  -o ${OBJECTDIR}/command_list.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/command_list.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
 endif
 

@@ -9,6 +9,8 @@
 #include "xc.h"
 #include "function.h"
 #include "init.h"
+#include "command_list.h"
+
 #include <math.h>
 
 
@@ -103,32 +105,31 @@ float convertTo(int adc_value, char type) {
     return 0;
 }
 
-void drive(char type, int time){
+void drive(int type){
     // OC1        
     OC1CON1 = 0;
     OC1CON2 = 0;
     switch(type){
-        case('F'):      // go forward     
+        case(1):      // go forward     
             RPOR2bits.RP68R = 0b010000;   // RD4-PWMD outs OC1
             RPOR1bits.RP66R = 0b010000;   // RD2-PWMB outs OC1    
             break;
         
-        case('L'):      // go counterclockwise
+        case(2):      // go counterclockwise
             RPOR2bits.RP68R = 0b010000;   
             RPOR0bits.RP65R = 0b010000;    
             break;
         
-        case('R'):      // go clockwise
+        case(3):      // go clockwise
             RPOR1bits.RP67R = 0b010000;   // 
             RPOR1bits.RP66R = 0b010000;   // 
             break;
         
-        case('B'):      // go backward
+        case(4):      // go backward
             RPOR1bits.RP67R = 0b010000;   // 
             RPOR0bits.RP65R = 0b010000;   //
             break;
-            
-        case('S'):      // stop
+        case(0):      // stop
             break;
 
         default:
@@ -136,15 +137,13 @@ void drive(char type, int time){
         
         
     }
-    if(type != 'S'){
+    if(type != 0){
         OC1CON1bits.OCTSEL = 0x07;
         OC1R = 5200;
         OC1RS = 7200;
         OC1CON2bits.SYNCSEL = 0x1F;
-        
-        OC1CON1bits.OCM = 6;     
-    }
-            
+        OC1CON1bits.OCM = 6;
+    }         
 }
 
 

@@ -17,11 +17,13 @@ int parse_byte(parser_state* ps, char byte) {
                 // Transition to STATE_TYPE when '$' is received
                 ps->state = STATE_TYPE;
                 ps->index_type = 0; // Reset index for the message type
-                toggleLed(2);
+//                                                            toggleLed(1);
+
             }
             break;
             
         case STATE_TYPE:    // Reading the message type
+
             if (byte == ',') {
                 // Transition to STATE_PAYLOAD when ',' is received
                 ps->state = STATE_PAYLOAD;
@@ -36,7 +38,7 @@ int parse_byte(parser_state* ps, char byte) {
 				ps->state = STATE_DOLLAR; // get ready for a new message
                 ps->msg_type[ps->index_type] = '\0';
 				ps->msg_payload[0] = '\0'; // no payload
-                //toggleLed(2);
+
                 return NEW_MESSAGE;
                 
             } else {

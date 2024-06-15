@@ -15,23 +15,38 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "command_list.h"
+
+typedef struct {
+    int type;
+    int time;
+    int cnt;
+} CurrentCommand;
+
+void init_command(CurrentCommand *cmd) {
+    cmd->type = 0;
+    cmd->time = 0;
+    //cmd->type = 0;
+}
+
+CurrentCommand current_command;
 
 
 // 1kHz is 1000 ms
 
 #define WAIT_FOR_START (0)
 #define EXECUTE (1)
-#define MAX_TASK 5
+#define MAX_TASK 6
 
 parser_state pstate;
 
 CircularBuffer buffer_Rx;
 CircularBuffer buffer_Tx;
+CommandList cmd_fifo;
 
 cmd buff_cmd;
 
-//extern CircularBuffer uartBufferRx;
-//extern CircularBuffer uartBufferTx;
+int tyme;
 
 int state;
 
@@ -53,15 +68,22 @@ void __attribute__((__interrupt__, __auto_psv__))_INT1Interrupt(){
 void __attribute__ (( __interrupt__ , __auto_psv__ )) _U1RXInterrupt() {
     char data_Rx;
     data_Rx = U1RXREG;         // Read from RX register
-    if(write_circular_buffer(&buffer_Rx, data_Rx) == 0){} 
+    if(write_circular_buffer(&buffer_Rx, data_Rx) == 0){
+    //toggleLed(1);
+    }
     else{
         U1TXREG = '0';
     }
-    
-    //parse_byte(&pstate, (char)data_Rx);
-    
-    //U1TXREG = data_Rx;
     IFS0bits.U1RXIF = 0;    // Reset interrupt flag
+}
+
+void __attribute__((__interrupt__, __auto_psv__)) _U1TXInterrupt() {
+    IFS0bits.U1TXIF = 0; // clear the interrupt flag
+    // if the end of the message is reached
+    char send;
+    if (read_circular_buffer(&buffer_Tx, &send) == 0) {
+        U1TXREG = send; // Send to TX register
+    }
 }
 
 void mapInterruptsButton(){
@@ -90,10 +112,13 @@ void task_blink_indicators(){
     toggleLed(3);
 }
 
-void task_uart_send(){
-//    char send;
-//    readBuffer(uartBufferTx,)
+void task_uart_send() {
+    char send;
+    if (read_circular_buffer(&buffer_Tx, &send) == 0) {
+        U1TXREG = send; // Send to TX register
+    }
 }
+
 
 void task_get_battery_voltage() {
     int adc_battery = ADC1BUF0;
@@ -116,53 +141,164 @@ void task_get_distance() {
     sprintf(str, "$MDIST,%d*", (int) dist);
     //    strcat(str,float_str);
 
-    for (int i = 0; str[i] != '\0'; i++) {
-        //addToBuffer(&uartBufferTx, str[i]);
+}
+
+// finally in the command control for pwm we could implement something like:
+// (1) if no current command then take one 
+//if (wait for start):
+//	do nothing
+//if(execute)
+//	if (m_dist <= 20 cm):
+//           (if cmd is in its execution, count time) else do nothing
+//        else
+//		just simply execute function adn count time.
+
+void task_pwm_control() {
+    if (state == EXECUTE) {
+        if (current_command.time == 0) {
+            //drive(0);
+            dequeue_cmd_list(&cmd_fifo, &current_command.type, &current_command.time);
+            drive(current_command.type);
+            current_command.type = 0;
+        }
+
+        if (current_command.time != 0) {
+            current_command.time = current_command.time - 1;
+        }
+        //U1TXREG = current_command.time + '0';
+        U1TXREG = current_command.type + '0';
     }
 }
+
+//int parsing_process() {
+//    char data;
+//    int result;
+//
+//    // Read a byte from the buffer
+//    if (read_circular_buffer(&buffer_Rx, &data) == 0) {
+//        // Parse the byte
+//        result = parse_byte(&pstate, data);
+//        
+//        // Check if a new message has been received
+//        if (result == NEW_MESSAGE) {
+//            turnOnLed(2);
+//            // Handle the new message
+//            // For example, if the message type is 'PCCMD', turn on LED 1
+//            if (strncmp(pstate.msg_type, "PCCMD", strlen("PCCMD")) == 0) {
+//                // Extract the first number
+//                int cmd_type = extract_integer(pstate.msg_payload);
+//                for (int i = 0; pstate.msg_payload[i] != '\0'; i++) {
+//                    if (cmd_type < 5 && cmd_type > 0) {
+//                        // Find the start of the next number
+//                        int next_index = next_value(pstate.msg_payload, 0);
+//                        // Extract the second number
+//                        int cmd_time = extract_integer(pstate.msg_payload + next_index);
+//                        if (cmd_time > 0) {
+//                            char msg[9];
+//                            if(enqueue_cmd_list(&cmd_fifo, cmd_type, cmd_time) == 0 ) {
+//                                strcat(msg,"$MACK,1*");
+////                                char *msg = ;"$MACK,1*"
+//                            }
+//                            else {
+//                                strcat(msg,"$MACK,0*");
+////                                char *msg = "$MACK,0*";
+//                            }
+//                            for(int i = 0; msg[i] != '\0'; i++) {
+//                                write_circular_buffer(&buffer_Tx, msg[i]);
+//                            }
+//
+//                        }
+//                    }
+//                }
+//                
+//                return 1;
+//            }
+//        }
+//    }
+//}
+
+
+//            if (strncmp(pstate.msg_type, "PCCMD", strlen("PCCMD")) == 0) {
+//                // Extract the first number
+//                int cmd_type = extract_integer(pstate.msg_payload);
+//                for (int i = 0; pstate.msg_payload[i] != '\0'; i++) {
+//                    if (cmd_type < 5 && cmd_type > 0) {
+//                        // Find the start of the next number
+//                        int next_index = next_value(pstate.msg_payload, 0);
+//                        // Extract the second number
+//                        int cmd_time = extract_integer(pstate.msg_payload + next_index);
+//                        if (cmd_time > 0) {
+//                            char msg[9];
+//                            if(enqueue_cmd_list(&cmd_fifo, cmd_type, cmd_time) == 0 ) {
+//                                strcat(msg,"$MACK,1*");
+////                                char *msg = ;"$MACK,1*"
+//                            }
+//                            else {
+//                                strcat(msg,"$MACK,0*");
+////                                char *msg = "$MACK,0*";
+//                            }
+//                            for(int i = 0; msg[i] != '\0'; i++) {
+//                                write_circular_buffer(&buffer_Tx, msg[i]);
+//                            }
+//
+//                        }
+//                    }
+//                }
 
 int parsing_process() {
     char data;
     int result;
-
+    
     // Read a byte from the buffer
-    if (read_circular_buffer(&buffer_Rx, &data)) {
+    if (read_circular_buffer(&buffer_Rx, &data) == 0) {
         // Parse the byte
         result = parse_byte(&pstate, data);
 
         // Check if a new message has been received
         if (result == NEW_MESSAGE) {
-            // Handle the new message
+
             // For example, if the message type is 'PCCMD', turn on LED 1
-            if (strcmp(pstate.msg_type, "PCCMD") == 0) {
-                turnOnLed(1);
+            if (strncmp(pstate.msg_type, "PCCMD", strlen("PCCMD")) == 0) {
                 // Extract the first number
-                int number1 = extract_integer(pstate.msg_payload);
+                int cmd_type = extract_integer(pstate.msg_payload);
 
                 // Find the start of the next number
                 int next_index = next_value(pstate.msg_payload, 0);
 
                 // Extract the second number
-                int number2 = extract_integer(pstate.msg_payload + next_index);
+                int cmd_time = extract_integer(pstate.msg_payload + next_index);
 
-                buff_cmd.type = number1;
-                buff_cmd.time = number2;
-                return 1;
+                if (enqueue_cmd_list(&cmd_fifo, cmd_type, cmd_time) == 0) {
+                    U1TXREG = '6';
+                }
             }
         }
+
     }
+    return 0;
 }
 
 
+
 int main() {
+    
+    
     initIO();
     initUART();
     initADC();
     initPWM();
     
     LATBbits.LATB9 = 1;
+    TRISEbits.TRISE8 = 1;
     
     mapInterruptsButton();
+    
+    init_parser(&pstate);
+    initBuffer(&buffer_Rx);
+    initBuffer(&buffer_Tx);
+    init_cmd_list(&cmd_fifo);
+    init_command(&current_command);
+
     
     heartbeat schedInfo[MAX_TASK];
     
@@ -182,7 +318,7 @@ int main() {
     schedInfo[2].N = 1000;
     schedInfo[2].f = task_uart_send;
     schedInfo[2].params = NULL;
-    schedInfo[2].enable = 1;
+    schedInfo[2].enable = 0;
     
     schedInfo[3].n = 0;
     schedInfo[3].N = 1000; // 1 Hz frequency, triggers every 1000 runs
@@ -196,36 +332,49 @@ int main() {
     schedInfo[4].params = NULL;
     schedInfo[4].enable = 0;
     
+    schedInfo[5].n = 0;
+    schedInfo[5].N = 1; // 1 Hz frequency, triggers every 1000 runs
+    schedInfo[5].f = task_pwm_control;
+    schedInfo[5].params = NULL;
+    schedInfo[5].enable = 1;
+    
     state = WAIT_FOR_START;
     
-    init_parser(&pstate);
-    initBuffer(&buffer_Rx);
-    initBuffer(&buffer_Tx);
+
     
     tmr_setup_period(TIMER1,1);
     
     char data_Rx;
-    
+    enable_interrupt1();
     while(1){
         
         //parsing_process(); 
-        if(parsing_process() == 1){
-            U1TXREG = buff_cmd.type;
-            U1TXREG = buff_cmd.time;
-        }
-        //read_circular_buffer(&buffer_Rx, &data_Rx);
-        //parse_byte(&pstate, data_Rx);
+        if(parsing_process() == 0){
+        }    
         
-        
-        if(T2_BUTTON == 1 && IFS1bits.INT1IF == 1){
-            enable_interrupt1();
-            if(state == WAIT_FOR_START){
-                state = EXECUTE;
-            }
-            else if(state == EXECUTE){
-                state = WAIT_FOR_START;
-            }
+        /* switch state */
+        switch (state) {
+            case(WAIT_FOR_START):
+                drive(1);
+                if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
+                    IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
+                    IEC1bits.INT1IE = 1; // Enable the interrupt of INT1
+                    state = EXECUTE;
+                }
+                break;
+            case(EXECUTE):
+                drive(4);
+                toggleLed(2);
+                if (T2_BUTTON == 1 && IFS1bits.INT1IF == 1) {
+                    IFS1bits.INT1IF = 0; // Clear the interrupt flag of INT1
+                    IEC1bits.INT1IE = 1; // Enable the interrupt of INT1
+                    state = WAIT_FOR_START;
+                }
+                //state = WAIT_FOR_START;
+                break;
+ 
         }
+
         scheduler(schedInfo, MAX_TASK);
         tmr_wait_period(TIMER1);
     }

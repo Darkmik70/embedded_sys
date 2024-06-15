@@ -22,9 +22,6 @@ int write_circular_buffer(CircularBuffer *cb, char data);
 
 int read_circular_buffer(CircularBuffer *cb, char *data);
 
-void addToBuffer(CircularBuffer *uartBuffer, char data);
-int readBuffer(char buffer[], int length);
-int readByte();
 
 
 #endif	/* BUFFER_H */
