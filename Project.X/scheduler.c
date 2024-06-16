@@ -1,16 +1,5 @@
-/*
- * File:   scheduler.c
- * Author: RomiC
- *
- * Created on 9 giugno 2024, 22.17
- */
-
-
 #include "xc.h"
 #include "scheduler.h"
-#include "function.h"
-
-#define MAX_TASK 7
 
 void scheduler(heartbeat schedInfo[], int nTasks) 
 {
@@ -23,4 +12,3 @@ void scheduler(heartbeat schedInfo[], int nTasks)
         }
     }
 }
-

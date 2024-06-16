@@ -40,15 +40,17 @@
 #define BAUDRATE 9600
 #define BRGVAL ((FCY/BAUDRATE)/16) - 1
 
-void initUART();
+void init_UART();
 
 // ADC define function
 #define VDD 3.3     // voltage supplied to the ADC
 #define ADC_RESOLUTION 1024 // ADC 10-bit resolution
 
-void initADC();
+void init_ADC();
 
-void initPWM();
+void init_PWM();
+
+void init_PARSER();
 
 #ifdef	__cplusplus
 extern "C" {

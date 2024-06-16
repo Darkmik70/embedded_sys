@@ -1,9 +1,11 @@
-build/default/production/main.o: main.c function.h timer.h init.h \
- parser.h scheduler.h buffer.h command_list.h
+build/default/production/main.o: main.c led.h timer.h adc.h init.h \
+ parser.h scheduler.h circular_buffer.h
 
-function.h:
+led.h:
 
 timer.h:
+
+adc.h:
 
 init.h:
 
@@ -11,6 +13,4 @@ parser.h:
 
 scheduler.h:
 
-buffer.h:
-
-command_list.h:
+circular_buffer.h:

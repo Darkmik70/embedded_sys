@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/function.h</file>
             <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/parser.c</file>
             <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/buffer.c</file>
@@ -12,6 +13,16 @@
             <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/command_list.h</file>
             <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/function.c</file>
             <file>file:/C:/Users/RomiC/Documents/GitHub/embedded_sys/Project.X/command_list.c</file>
+=======
+            <file>file:/C:/Users/aless/MPLABXProjects/Project.X/adc.h</file>
+            <file>file:/C:/Users/aless/MPLABXProjects/Project.X/circular_buffer.c</file>
+            <file>file:/C:/Users/aless/MPLABXProjects/Project.X/parser.h</file>
+            <file>file:/C:/Users/aless/MPLABXProjects/Project.X/main.c</file>
+            <file>file:/C:/Users/aless/MPLABXProjects/Project.X/parser.c</file>
+            <file>file:/C:/Users/aless/MPLABXProjects/Project.X/circular_buffer.h</file>
+            <file>file:/C:/Users/aless/MPLABXProjects/Project.X/pwm.c</file>
+            <file>file:/C:/Users/aless/MPLABXProjects/Project.X/init.c</file>
+>>>>>>> main
         </group>
     </open-files>
 </project-private>
