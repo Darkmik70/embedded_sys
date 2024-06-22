@@ -1,14 +1,12 @@
 /*
  * File:   parser.c
- * Author: RomiC
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
  *
- * Created on 9 giugno 2024, 22.19
+ * Created on 30 maggio 2024, 12.00
  */
-
 #include "xc.h"
 #include "parser.h"
 #include "led.h"
-
 
 int parse_byte(parser_state* ps, char byte) {
     switch (ps->state) {
@@ -17,7 +15,6 @@ int parse_byte(parser_state* ps, char byte) {
                 // Transition to STATE_TYPE when '$' is received
                 ps->state = STATE_TYPE;
                 ps->index_type = 0; // Reset index for the message type
-                turnOnLed(1);
             }
             break;
             
@@ -87,4 +84,10 @@ int next_value(const char* msg, int i) {
 	if (msg[i] == ',')
 		i++;
 	return i;
+}
+
+void init_parser(parser_state *pstate){
+    pstate->state = STATE_DOLLAR;
+    pstate->index_type = 0;
+    pstate->index_payload = 0;
 }

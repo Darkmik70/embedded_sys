@@ -1,9 +1,9 @@
 /*
  * File:   timer.c
  * Author: Bua Odetti, Contreras, Krepa, Trovatello
- * Created on March 21, 2024, 2:24 PM
+ *
+ * Created on 30 maggio 2024, 12.00
  */
-
 #include "xc.h"
 #include "timer.h"
 

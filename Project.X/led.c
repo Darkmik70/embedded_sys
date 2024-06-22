@@ -1,3 +1,9 @@
+/*
+ * File:   led.c
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #include "xc.h"
 #include "led.h"
 #include "init.h"
@@ -83,8 +89,3 @@ void toggleLed(int LED_NUMBER) {
         LD_RIGHT = !LD_RIGHT;
     }
 }
-
-
-// 5Hz is 100ms on e 100 off
-// 2.5Hz is 200 ms on e 200 off
-

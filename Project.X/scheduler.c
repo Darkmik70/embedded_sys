@@ -1,3 +1,9 @@
+/*
+ * File:   scheduler.c
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #include "xc.h"
 #include "scheduler.h"
 

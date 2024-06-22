@@ -1,10 +1,15 @@
+/*
+ * File:   circular_buffer.h
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #ifndef CIRCULAR_BUFFER_H
 #define	CIRCULAR_BUFFER_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-#define BUFFER_SIZE  128
-
+#define BUFFER_SIZE  32
 
 typedef struct {
     char buffer[BUFFER_SIZE];

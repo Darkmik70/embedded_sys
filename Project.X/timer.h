@@ -1,4 +1,10 @@
- #ifndef TIMER_H
+/*
+ * File:   timer.h
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
+#ifndef TIMER_H
 #define	TIMER_H
 
 #include <xc.h>

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
@@ -6,34 +5,14 @@
     <memory name="data">
       <units>bytes</units>
       <length>53248</length>
-      <used>522</used>
-      <free>52726</free>
+      <used>318</used>
+      <free>52930</free>
     </memory>
     <memory name="program">
       <units>bytes</units>
       <length>524544</length>
-      <used>22671</used>
-      <free>501873</free>
+      <used>23493</used>
+      <free>501051</free>
     </memory>
   </executable>
 </project>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-
-<project>
-  <executable name="dist/default/production/Project.X.production.elf">
-    <memory name="data">
-      <units>bytes</units>
-      <length>53248</length>
-      <used>460</used>
-      <free>52788</free>
-    </memory>
-    <memory name="program">
-      <units>bytes</units>
-      <length>524544</length>
-      <used>22215</used>
-      <free>502329</free>
-    </memory>
-  </executable>
-</project>
->>>>>>> main

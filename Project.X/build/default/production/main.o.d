@@ -1,16 +1,20 @@
-build/default/production/main.o: main.c led.h timer.h adc.h init.h \
- parser.h scheduler.h circular_buffer.h
-
-led.h:
-
-timer.h:
+build/default/production/main.o: main.c adc.h circular_buffer.h \
+ command_list.h init.h led.h parser.h pwm.h scheduler.h timer.h
 
 adc.h:
 
+circular_buffer.h:
+
+command_list.h:
+
 init.h:
+
+led.h:
 
 parser.h:
 
+pwm.h:
+
 scheduler.h:
 
-circular_buffer.h:
+timer.h:

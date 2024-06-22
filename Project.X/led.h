@@ -1,4 +1,10 @@
- #ifndef LED_H
+/*
+ * File:   led.h
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
+#ifndef LED_H
 #define	LED_H
 
 #include <xc.h> 
@@ -20,8 +26,6 @@ void turnOffLed(int LED_NUMBER);
 void turnOnLed(int LED_NUMBER);
 
 void toggleLed(int LED_NUMBER);
-
-void drive(char type, int time);
 
 #ifdef	__cplusplus
 extern "C" {
