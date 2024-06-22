@@ -1,4 +1,9 @@
-
+/*
+ * File:   circular_buffer.c
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #include "circular_buffer.h"
 #include <xc.h>
 
@@ -47,12 +52,12 @@ int is_circular_buffer_empty(CircularBuffer *cb) {
  */
 int write_circular_buffer(CircularBuffer *cb, char data) {
     if (is_circular_buffer_full(cb)) {
-        return 0;
+        return -1;
     }
     cb->buffer[cb->head] = data;
     // Wrap the buffer around
     cb->head = (cb->head + 1) % cb->size;
-    return 1;
+    return 0;
 }
 
 /**
@@ -68,10 +73,10 @@ int write_circular_buffer(CircularBuffer *cb, char data) {
  */
 int read_circular_buffer(CircularBuffer *cb, char *data) {
     if (is_circular_buffer_empty(cb)) {
-        return 0;
+        return -1;
     }
     *data = cb->buffer[cb->tail];
     // Wrap around the buffer
     cb->tail = (cb->tail + 1) % cb->size;
-    return 1;
+    return 0;
 }

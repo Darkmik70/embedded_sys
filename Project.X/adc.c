@@ -1,10 +1,13 @@
+/*
+ * File:   adc.c
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #include "adc.h"
 #include <xc.h>
 #include <math.h>
 
-
-
-//TODO Add comments
 void init_adc() {
     // Remap the pins
     ANSELBbits.ANSB11 = 1;  // battery pin analog
@@ -46,17 +49,4 @@ float convertTo(int adc_value, char type) {
     }
     return 0;
 }
-
-//float get_battery_voltage(int adc_value) {
-//        // Convert ADC value to voltage
-//        float value = ((float)adc_value / ADC_RESOLUTION) * VDD;
-//        // Voltage divider
-//        return value*3;
-//}
-//
-//float get_ir_distance(int adc_value) {
-//        // Convert ADC value to voltage
-//        float value = ((float)adc_value / ADC_RESOLUTION) * VDD; // Convert ADC value to voltage
-//        return (2.34 - 4.74*value + 4.06*pow(value,2) -1.60*pow(value,3) + 0.24*pow(value,4))*100;
-//}
 

@@ -1,3 +1,9 @@
+/*
+ * File:   adc.h
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #ifndef ADC_H
 #define	ADC_H
 

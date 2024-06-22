@@ -1,3 +1,9 @@
+/*
+ * File:   command_list.h
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #ifndef COMMAND_LIST_H
 #define	COMMAND_LIST_H
 
@@ -15,12 +21,25 @@ typedef struct {
     int size;
 } CommandList;
 
+typedef struct {
+    int type;
+    int time;
+    int cnt;
+} CurrentCommand;
+
 /**
  * @brief Initialize command list with zeros
  * 
  * @param cmd_list ptr to CommandList struct
  */
 void init_cmd_list(CommandList *cmd_list); 
+
+/**
+ * @brief Initialize command element with zeros
+ * 
+ * @param cmd ptr to CurrentCommand struct
+ */
+void init_command(CurrentCommand *cmd);
 
 /**
  * @brief checks if the command list is full

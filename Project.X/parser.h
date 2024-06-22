@@ -1,3 +1,9 @@
+/*
+ * File:   parser.h
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #ifndef PARSER_H
 #define	PARSER_H
 
@@ -40,6 +46,6 @@ Example: with the string "10,20,30", and i=0 it will return 3. With the same str
 */  
 int next_value(const char* msg, int i);
 
-void init_parser();
+void init_parser(parser_state *pstate);
 
 #endif	/* PARSER_H */

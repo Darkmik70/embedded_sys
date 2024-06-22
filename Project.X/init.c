@@ -1,10 +1,9 @@
 /*
  * File:   init.c
- * Author: RomiC
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
  *
- * Created on April 28, 2024, 12:36 PM
+ * Created on 30 maggio 2024, 12.00
  */
-
 #include "xc.h"
 #include "timer.h"
 #include "init.h"
@@ -33,10 +32,7 @@ void init_UART() {
     
     U1STAbits.UTXISEL0 = 0;
     U1STAbits.UTXISEL1 = 0;
-    
-//    IFS0bits.U1TXIF = 0;
-//    IEC0bits.U1TXIE = 1;
-    
+
     // enable the UART
     U1MODEbits.UARTEN = 1; // Enable UART
     U1STAbits.UTXEN = 1; // Enable UART U1TX (must be after UARTEN)
@@ -63,7 +59,6 @@ void init_ADC(){
     AD1CSSLbits.CSS14 = 1;
     
     AD1CON1bits.ADON = 1;   // turn on the ADC module
-    
 }
 
 /**
@@ -76,11 +71,4 @@ void init_PWM(){
     TRISDbits.TRISD2 = 0;
     TRISDbits.TRISD3 = 0;
     TRISDbits.TRISD4 = 0;
-}
-
-void init_PARSER(){
-    parser_state pstate;
-	pstate.state = STATE_DOLLAR;
-	pstate.index_type = 0; 
-	pstate.index_payload = 0;
 }

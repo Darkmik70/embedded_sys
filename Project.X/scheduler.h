@@ -1,3 +1,9 @@
+/*
+ * File:   scheduler.h
+ * Author: Bua Odetti, Contreras, Krepa, Trovatello
+ *
+ * Created on 30 maggio 2024, 12.00
+ */
 #ifndef SCHEDULER_H
 #define	SCHEDULER_H
 
